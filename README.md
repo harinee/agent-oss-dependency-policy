@@ -7,55 +7,107 @@
 
 ---
 
-## 🎯 What is this?
+## 🚀 Get Started in 3 Steps
 
-**Agent OSS Guardrails** provides reusable, modular instruction files that guide AI coding agents toward safer dependency selection practices for **supply chain risk reduction**.
+### **Step 1: Copy a pre-packaged file** 📦
+Choose based on your project type:
 
-**Why:** AI agents can introduce dependencies faster than humans can review them. These guardrails provide agent-readable constraints that encourage safer practices.
+```bash
+# ✨ Most common - General projects
+cp packaged/baseline-general.skills.md .clinerules/oss-guardrails.md
 
-**Use cases:** AI coding agents (Cursor, Cline, GitHub Copilot, Aider, Windsurf), organizational policies, training guidelines
+# 🐍 Python production projects
+cp packaged/python-sensitive-repo.skills.md .clinerules/oss-guardrails.md
 
-**Key characteristics:** Modular, ecosystem-specific, risk-adaptive, standards-aligned
+# 🟢 Node.js with autonomous agent
+cp packaged/npm-high-autonomy.skills.md .clinerules/oss-guardrails.md
 
-**Reality check:** These are guidelines for AI agents, not security controls. They complement (not replace) SCA tools, SBOM, and code review. Effectiveness depends on agent capabilities.
+# 🔒 High-autonomy agent needing strict controls
+cp packaged/strict-agent-high-autonomy.skills.md .clinerules/oss-guardrails.md
+```
 
-[📖 Read why this exists](docs/why-this-exists.md)
+### **Step 2: That's it!** ✅
+Your AI agent will now follow these guardrails when selecting dependencies.
+
+### **Step 3: (Optional) Customize** 🔧
+Need different rules? See [📖 Advanced: Custom Combinations](#-advanced-custom-combinations) below.
 
 ---
 
-## 🚀 Quick Start
+## 🎯 What is this?
 
-### 1. Choose Your Baseline
+**Problem:** AI agents can add risky dependencies faster than humans can review them.
 
+**Solution:** Give your AI agent clear, readable instructions on selecting safer dependencies.
+
+**How it works:** These instruction files guide agents toward:
+- ✅ Well-maintained packages
+- ✅ Pinned versions
+- ✅ Official registries
+- ✅ Minimal dependencies
+- ✅ Security best practices
+
+**Compatible with:** Cursor, Cline, GitHub Copilot, Aider, Windsurf, and other AI coding agents
+
+**Reality check:** These are guidelines, not security controls. They complement (not replace) scanning tools and code review.
+
+---
+
+## 📦 Pre-Packaged Options (Recommended)
+
+| Package | When to Use | Command |
+|---------|-------------|---------|
+| **baseline-general** | Most projects, internal tools, learning | `cp packaged/baseline-general.skills.md .clinerules/` |
+| **python-sensitive-repo** | Python production systems | `cp packaged/python-sensitive-repo.skills.md .clinerules/` |
+| **npm-high-autonomy** | Node.js with autonomous agent | `cp packaged/npm-high-autonomy.skills.md .clinerules/` |
+| **strict-agent-high-autonomy** | Agent with broad permissions | `cp packaged/strict-agent-high-autonomy.skills.md .clinerules/` |
+
+> 💡 **Tip:** Start with `baseline-general` if unsure. You can always switch later!
+
+---
+
+## 🔧 Advanced: Custom Combinations
+
+Want to customize? Build your own by combining files:
+
+### **Foundation** (Pick one)
+- `skills/foundational/oss-selection-baseline.skills.md` - Balanced safety
+- `skills/foundational/oss-selection-strict.skills.md` - Maximum security
+
+### **+ Add what your agent can do**
+- `skills/overlays/capabilities/agent-can-install-packages.skills.md`
+- `skills/overlays/capabilities/agent-can-run-shell.skills.md`
+- `skills/overlays/capabilities/agent-can-use-tools-or-mcp.skills.md`
+- `skills/overlays/capabilities/agent-can-open-pr.skills.md`
+
+### **+ Add your tech stack**
+- `skills/overlays/ecosystems/npm-node.skills.md`
+- `skills/overlays/ecosystems/python-pip.skills.md`
+- `skills/overlays/ecosystems/java-maven-gradle.skills.md`
+- `skills/overlays/ecosystems/container-images.skills.md`
+
+### **Example: Custom Node.js setup**
 ```bash
-# Most projects - balanced safety and flexibility
-skills/foundational/oss-selection-baseline.skills.md
-
-# Production/sensitive - strict controls
-skills/foundational/oss-selection-strict.skills.md
-```
-
-### 2. Combine What You Need
-
-```bash
-# Node.js with autonomous agent
 cat skills/foundational/oss-selection-baseline.skills.md \
     skills/overlays/capabilities/agent-can-install-packages.skills.md \
     skills/overlays/ecosystems/npm-node.skills.md \
     > .clinerules/oss-guardrails.md
-
-# Or use pre-packaged combinations
-cp packaged/baseline-general.skills.md .clinerules/oss-guardrails.md
 ```
 
-[📖 Detailed selection guide](docs/how-to-choose.md)
+**📖 Need help deciding?** See the [detailed selection guide](docs/how-to-choose.md)
 
 ---
 
 ## 📁 Repository Structure
 
 ```
-skills/
+packaged/                  # 👈 START HERE - Ready-to-use files
+├── baseline-general.skills.md
+├── python-sensitive-repo.skills.md
+├── npm-high-autonomy.skills.md
+└── strict-agent-high-autonomy.skills.md
+
+skills/                    # For custom combinations
 ├── foundational/          # baseline or strict
 └── overlays/
     ├── capabilities/      # what agent can do
@@ -63,46 +115,81 @@ skills/
     ├── artifact-types/    # CI/CD, scanners, MCP
     └── contexts/          # prototype, production, regulated
 
-packaged/                  # ready-made combinations
-examples/                  # usage examples
-docs/                      # detailed guides
+examples/                  # Usage examples
+docs/                      # Detailed guides
 ```
 
 ---
 
-## 📖 Documentation
+## 📖 Learn More
 
-| Document | Purpose |
-|----------|---------|
-| [**Why This Exists**](docs/why-this-exists.md) | Supply chain risks & problem context |
+| Document | What You'll Learn |
+|----------|----------|
+| [**Quick Start Guide**](docs/QUICK_START.md) | 5-minute setup walkthrough |
 | [**How to Choose**](docs/how-to-choose.md) | Decision guide with examples |
+| [**Why This Exists**](docs/why-this-exists.md) | Supply chain risks & problem context |
 | [**Design Principles**](docs/design-principles.md) | 15 core principles |
 | [**Mapping to Standards**](docs/mapping-to-standards.md) | SLSA, OWASP, NIST alignment |
-| [**Contribution Guide**](docs/contribution-guide.md) | How to contribute |
 
 ---
 
-## 🔧 Implementation
+## 🎯 Different AI Agents
 
-**For AI Agents:**
+### For Cline/Roo (Recommended location)
 ```bash
-.clinerules/oss-guardrails.md           # Cline/Roo (project-level)
-~/Documents/Cline/Rules/                # Cline (global)
-.cursorrules                            # Cursor
-.aider.conf.yml                         # Aider
-.github/copilot-instructions.md         # GitHub Copilot
+cp packaged/baseline-general.skills.md .clinerules/oss-guardrails.md
 ```
 
-**For Organizations:**
-- Artifact registry policies (Artifactory, Nexus)
-- Policy-as-code (OPA, Kyverno)
-- PR templates and pre-commit hooks
+### For Cursor
+```bash
+cp packaged/baseline-general.skills.md .cursorrules
+```
+
+### For GitHub Copilot
+```bash
+mkdir -p .github
+cp packaged/baseline-general.skills.md .github/copilot-instructions.md
+```
+
+### For Aider
+Add to `.aider.conf.yml`:
+```yaml
+read: packaged/baseline-general.skills.md
+```
+
+### Global (All projects)
+```bash
+# Cline - applies to all projects
+mkdir -p ~/Documents/Cline/Rules/
+cp packaged/baseline-general.skills.md ~/Documents/Cline/Rules/oss-guardrails.md
+```
+
+---
+
+## ❓ FAQ
+
+**Q: Which file should I choose?**  
+A: Start with `baseline-general.skills.md` - it works for most projects.
+
+**Q: Do I need to modify the files?**  
+A: No! Use them as-is. Customize only if you have specific needs.
+
+**Q: Will this block my agent from working?**  
+A: No, these are guidelines that help your agent make better choices, not hard blocks.
+
+**Q: Do I still need security scanning tools?**  
+A: Yes! These guardrails complement (don't replace) tools like Snyk, Dependabot, etc.
+
+**Q: Can I use multiple files?**  
+A: Yes, you can combine them - see [Advanced: Custom Combinations](#-advanced-custom-combinations)
 
 ---
 
 ## 🤝 Contributing
 
 Contributions welcome! See [Contribution Guide](docs/contribution-guide.md)
+
+---
 
 ## 📄 License
 
@@ -112,7 +199,7 @@ MIT License - see [LICENSE](LICENSE)
 
 <div align="center">
 
-**Practical supply chain guidance for AI agents**
+**Practical supply chain guidance for AI agents** 🛡️
 
 Built with lessons from [SLSA](https://slsa.dev/), [OWASP](https://owasp.org/), [NIST SSDF](https://csrc.nist.gov/Projects/ssdf)
 

@@ -4,17 +4,61 @@
 
 ---
 
-## 🎯 Quick Decision
+## ⚡ TL;DR - Just Tell Me What to Use
 
-1. **Production system?** → Use **strict** foundation
-2. **Prototype/experiment?** → Use **baseline** foundation
-3. **What language?** → Add ecosystem overlay
-4. **Can agent install packages?** → Add capability overlays
-5. **Risk tolerance?** → Add context overlay
+**Most projects (95% of cases):**
+```bash
+cp packaged/baseline-general.skills.md .clinerules/oss-guardrails.md
+```
+
+**Production Python:**
+```bash
+cp packaged/python-sensitive-repo.skills.md .clinerules/oss-guardrails.md
+```
+
+**Still not sure?** → Use `baseline-general` and adjust later if needed.
 
 ---
 
-## 📋 5-Step Selection Process
+## 🎯 Quick Decision Tree
+
+```
+START HERE
+    ↓
+Is this a production system? 
+    ├─ NO → Use packaged/baseline-general.skills.md ✅
+    ├─ YES → Continue ↓
+    │
+    What's your tech stack?
+    ├─ Python → Use packaged/python-sensitive-repo.skills.md ✅
+    ├─ Node.js → Use packaged/npm-high-autonomy.skills.md ✅
+    └─ Other/Multi → Use packaged/strict-agent-high-autonomy.skills.md ✅
+```
+
+> **💡 Pro tip:** Start simple. You can always switch later.
+
+---
+
+## 📦 Pre-Packaged Files (Easiest)
+
+Choose one based on your project:
+
+| Package | Perfect For | Command |
+|---------|-------------|---------|
+| **baseline-general** ⭐ | Most projects, internal tools, prototypes | `cp packaged/baseline-general.skills.md .clinerules/` |
+| **python-sensitive-repo** | Python production systems, FastAPI, Django | `cp packaged/python-sensitive-repo.skills.md .clinerules/` |
+| **npm-high-autonomy** | Node.js/React with autonomous agent | `cp packaged/npm-high-autonomy.skills.md .clinerules/` |
+| **strict-agent-high-autonomy** | Agents with many permissions | `cp packaged/strict-agent-high-autonomy.skills.md .clinerules/` |
+
+**⭐ = Recommended for most users**
+
+---
+
+## 🔧 Custom Combinations (Advanced)
+
+Only do this if pre-packaged options don't fit. Otherwise, skip to [Examples](#-real-world-examples).
+
+### 📋 5-Step Selection Process
 
 ### Step 1: Choose Your Foundation 🏗️
 
