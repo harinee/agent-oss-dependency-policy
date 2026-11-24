@@ -44,14 +44,14 @@ Only four rule families have an enforced counterpart here: AGE-1, SCR-1 and the 
 
 ## Costs
 
-- **It can delay fixes.** A cooldown delays every new release, including fixes that are not tied to a published advisory. The fast path covers only fixes with an advisory.
+- **It can delay fixes.** A cooldown delays every new release, including fixes that are not tied to a published advisory. The fast path (FIX-1) covers only fixes for advisories rated high or critical, or known to be exploited.
 - **It uses context.** A preset is roughly 160 to 330 lines (12 to 22 KB), loaded into every session.
 - **It will sometimes ask when it should not.** The [response model](response-model.md) is designed to make that rare, and that claim is also unmeasured.
 - **Missing evidence mostly fails open.** When a check cannot be done, the agent reports `not checked` and proceeds, except for package existence and version age (EVD-1). A registry that hides the publishing account, or an agent with no advisory database, leaves those checks undone.
 
 ## Thresholds
 
-- The 7-day cooldown is based on how quickly malicious releases were removed in the incidents surveyed. It is a margin, not a measurement.
+- The 3-day cooldown for packages and the 7-day cooldown for MCP servers and editor extensions are based on how quickly malicious releases were removed in the incidents surveyed, and on the defaults of Dependabot and Renovate. They are margins, not measurements.
 - The 90-day package-age and 24-month staleness defaults are pragmatic starting points. Nobody has shown they are better than other values.
 
 What each protects against and when to change it: [response-model.md](response-model.md#thresholds).
@@ -67,6 +67,31 @@ What each protects against and when to change it: [response-model.md](response-m
 
 A preset is a set of instructions you hand to an agent. Read it first, keep a copy at a known commit, and review changes when you update. The `agent-skills` overlay says this about every third-party skill, and it applies to this one.
 
+## Status of each part
+
+| Part | Status |
+|---|---|
+| Policy files | Advisory text. Structure and consistency checked by `scripts/selfcheck.py` in CI. |
+| Install locations | Checked against each agent's documentation on 2026-11-24. Not run in each agent. |
+| `enforcement/ci/check_pins.py` | Tested on passing and failing fixtures |
+| Other `enforcement/` examples | Settings checked against vendor documentation on 2026-11-24; not run |
+| `evals/` | Harness self-test passes with scripted stand-ins; no agent results |
+
 ## What to use with it
 
-See the table in the [README](../README.md#what-this-does-not-cover).
+The policy complements these controls. It replaces none of them.
+
+| Need | Why it is outside this repo | What to use alongside |
+|---|---|---|
+| Finding known vulnerabilities; automated updates | Needs a vulnerability database and a scanner, not instructions | Software composition analysis (for example OSV-Scanner, `npm audit`, `pip-audit`); Dependabot or Renovate with a cooldown |
+| SBOMs and vulnerability management | An inventory and a process, not an agent decision | An SBOM generator (SPDX or CycloneDX) and a tracking process |
+| Secret scanning and credential hygiene | Package malware steals credentials; limiting that is your environment's job | Secret scanning, short-lived and narrowly scoped tokens |
+| Hardening your own CI/CD and releases | Only the publisher can fix publisher-side weaknesses | Workflow linting (for example zizmor), trusted publishing, protected branches |
+| Private registries, proxies and install-time allowlists | Enforcement at the network or registry | A registry proxy or an install-time firewall (for example Socket Firewall) |
+| Verifying signatures and provenance | Cryptographic verification is a tool's job; the policy only says how much weight to give the result | `npm audit signatures`, registry attestations |
+| Agent sandboxing and least privilege | Limits what a bad install can reach; instructions cannot | Containers or VMs for agents, permission settings in your agent |
+| Human code review | The policy asks the agent to stop; only review makes the stop binding | Required reviews and branch protection |
+| Licence review | The policy flags licences; it does not judge them | Your legal process or a licence scanner |
+| Incident response | Happens after the fact | A plan for rotating credentials and rebuilding |
+
+How the rules relate to NIST SSDF, OWASP, CIS and SLSA: [mapping-to-standards.md](mapping-to-standards.md).
