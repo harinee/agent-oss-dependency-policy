@@ -1,52 +1,77 @@
-# How the files are packaged
+# How the repository is laid out
 
-## Three layers
+You do not need this page to use the policy: install one preset as described in the [quick start](QUICK_START.md). This page is for people building their own combination or contributing.
 
-| Layer | Where | What it is |
+## One source, two generated forms
+
+```
+policy/            SOURCE. Hand-written. The only place rules are edited.
+  foundational/      the rule set: baseline or strict
+  overlays/          additions per capability, ecosystem, artifact type, context
+presets.json       SOURCE. Which policy files make up each preset.
+
+presets/           GENERATED. One plain-Markdown file per preset.
+                   For always-on instruction files (AGENTS.md, CLAUDE.md, rules folders).
+agent-skills/      GENERATED. The same presets as Agent Skills folders (SKILL.md).
+                   For agents that load skills on demand.
+```
+
+| Directory | Edited by hand? | What it is for |
 |---|---|---|
-| Foundational | `skills/foundational/` | The rule set. Pick `oss-selection-baseline` or `oss-selection-strict`. |
-| Overlays | `skills/overlays/` | Additions for a capability, ecosystem, artifact type or context. Each one needs a foundational file. |
-| Presets | `packaged/` | A foundational file and a set of overlays joined into one file, ready to copy. |
+| `policy/` | Yes | The rules. Foundational files hold the full rule set; overlays add to it and refer to its rules by ID. An overlay on its own is incomplete. |
+| `presets/` | No | What most users install: a foundational file and a set of overlays joined into one file. |
+| `agent-skills/` | No | The same content with the YAML front matter the [Agent Skills specification](https://agentskills.io/specification) requires, in the folder layout it requires. |
 
-Overlays refer to foundational rules by ID (for example "apply AGE-1") and do not repeat them. An overlay on its own is incomplete.
+### Why both `presets/` and `agent-skills/` exist
 
-## Presets are generated
+They carry identical policy text for two different loading mechanisms:
 
-`presets.json` lists each preset's source files. `python3 scripts/build.py` writes each preset as the exact concatenation of its sources, so a preset cannot drift from them. `python3 scripts/build.py --check` fails if a preset is out of date; CI runs it.
+- An always-on instruction file is plain Markdown that is appended to or placed beside other instructions. YAML front matter in the middle of `AGENTS.md` would be noise.
+- An Agent Skill must be a folder named after the skill containing a `SKILL.md` that starts with `name` and `description` front matter.
 
-Do not edit files in `packaged/` or `agent-skills/`. Edit the source and rebuild.
+Neither form can serve as the other, so the build writes both from the same sources. The body of `agent-skills/oss-deps-<name>/SKILL.md` is byte-for-byte `presets/<name>.md`.
 
-To make your own combination, either join files by hand:
+### Why they cannot drift
+
+`python3 scripts/build.py` writes every file in `presets/` and `agent-skills/` as the exact concatenation of the sources listed in `presets.json`. `python3 scripts/build.py --check` fails if any generated file is missing, stale or has no preset behind it; CI runs it on every pull request.
+
+Do not edit files in `presets/` or `agent-skills/`. Edit the source and run `make build`.
+
+## Always-on or on-demand
+
+| | Always-on instructions | Agent Skill |
+|---|---|---|
+| Install from | `presets/<name>.md` | `agent-skills/oss-deps-<name>/` |
+| Loaded | By the agent product at the start of every session | When the model judges the skill's description relevant to the task |
+| Depends on the model choosing to load it | No | **Yes** |
+| Context cost | The whole preset, every session | The description only, until the skill is loaded |
+| Use when | Default. A dependency policy has to apply every time a dependency is touched. | Context is tight and you have checked that your agent activates the skill on dependency tasks |
+
+Loading is not the same as compliance: in both forms the model can still ignore a rule. See [limitations.md](limitations.md#activation-and-enforcement).
+
+Install one form, not both. Loading both doubles the context cost and adds nothing.
+
+## Building your own combination
+
+Presets cover common cases. Overlays are additive, so you can extend a preset by appending overlays to it, or start from a foundational file:
 
 ```bash
-cat skills/foundational/oss-selection-baseline.skills.md \
-    skills/overlays/capabilities/agent-can-install-packages.skills.md \
-    skills/overlays/ecosystems/go-modules.skills.md \
+# extend a preset
+cat presets/baseline-general.md \
+    policy/overlays/ecosystems/npm-node.md \
+    > my-policy.md
+
+# or build from scratch: one foundational file first, then overlays
+cat policy/foundational/oss-selection-baseline.md \
+    policy/overlays/capabilities/agent-can-install-packages.md \
+    policy/overlays/ecosystems/go-modules.md \
     > my-policy.md
 ```
 
-or add an entry to `presets.json` and run the build.
-
-## Two ways to give a preset to an agent
-
-**As always-on instructions (recommended).** Copy the preset into a file your agent reads on every session, such as `AGENTS.md`. A dependency policy has to apply every time a dependency is touched, and always-on files guarantee it is loaded. See [QUICK_START.md](QUICK_START.md) for locations per agent.
-
-**As an Agent Skill.** Each preset is also built as a folder under `agent-skills/` in the [Agent Skills](https://agentskills.io/specification) layout:
-
-```
-agent-skills/
-  oss-deps-baseline-general/
-    SKILL.md        # YAML front matter (name, description) + the preset
-```
-
-The `name` matches the folder name and the `description` says when to use it, as the specification requires. Copy the folder into your agent's skills directory, for example `.claude/skills/` or `.agents/skills/`.
-
-A skill is loaded when the agent decides its description matches the task. That saves context when no dependency work is happening, but the agent may not load it when it should. If you rely on the skill form, check that your agent activates it on a dependency task.
-
-The `.skills.md` suffix on files in `skills/` and `packaged/` is this repository's own naming. It is not part of the Agent Skills format; those files are plain Markdown.
+To get an Agent Skills folder for a custom combination, or to keep it reproducible, add an entry to `presets.json` and run `make build`. The choices are tabled in [how-to-choose.md](how-to-choose.md).
 
 ## Checks
 
-`python3 scripts/selfcheck.py` verifies the structure: file format, rule IDs, front matter of generated skills, internal links, that presets match their sources, that every overlay is reachable, and that thresholds in the docs and in `enforcement/` match the policy tables.
+`python3 scripts/selfcheck.py` verifies structure and consistency: file format, rule IDs, front matter of generated skills, internal links, that generated files match their sources, that every overlay is reachable, and that levels and thresholds quoted in the docs and in `enforcement/` match the policy files.
 
 The Agent Skills project publishes a reference validator, `skills-ref`. It has not been run against these folders; `selfcheck.py` checks the same front-matter constraints.

@@ -25,7 +25,7 @@ import sys
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 RULE = re.compile(r"^- \*\*([A-Z]+)-(\d+)(?: \((BLOCK|ASK|NOTE)\))?\*\* (.*)$")
-UNLEVELLED = {"APR", "FIX", "OVR", "AUT"}  # escape hatches and the fail-closed rule have no level
+UNLEVELLED = {"APR", "FIX", "OVR", "LOC", "EVD", "AUT"}  # exceptions, overrides, missing evidence and fail-closed have no level
 errors = []
 notes = []
 
@@ -86,8 +86,8 @@ def thresholds(path):
 
 
 # 1 and 2: format and rules --------------------------------------------------
-foundational = sorted((ROOT / "skills/foundational").glob("*.skills.md"))
-overlays = sorted((ROOT / "skills/overlays").rglob("*.skills.md"))
+foundational = sorted((ROOT / "policy/foundational").glob("*.md"))
+overlays = sorted((ROOT / "policy/overlays").rglob("*.md"))
 defined = {}
 prefix_owner = {}
 for path in foundational + overlays:
@@ -192,7 +192,7 @@ for path in md_files():
             err(f"{rel(path)}: broken link {target}")
         elif anchor and dest.suffix == ".md" and anchor not in anchors(dest):
             err(f"{rel(path)}: broken anchor {target}")
-    for m in re.finditer(r"`((?:skills|packaged|agent-skills|enforcement|evals|scripts|docs|examples)/[\w./-]+\.\w+)`", text):
+    for m in re.finditer(r"`((?:policy|presets|agent-skills|enforcement|evals|scripts|docs|examples)/[\w./-]+\.\w+)`", text):
         if not (ROOT / m.group(1)).exists():
             err(f"{rel(path)}: refers to missing path {m.group(1)}")
 
@@ -214,13 +214,13 @@ for p in presets:
         err(f"preset {p['name']}: at most one context overlay")
 
 # 8: thresholds -------------------------------------------------------------------------
-base = thresholds(ROOT / "skills/foundational/oss-selection-baseline.skills.md")
-strict = thresholds(ROOT / "skills/foundational/oss-selection-strict.skills.md")
-ctx = {name: thresholds(ROOT / f"skills/overlays/contexts/{file}.skills.md")
+base = thresholds(ROOT / "policy/foundational/oss-selection-baseline.md")
+strict = thresholds(ROOT / "policy/foundational/oss-selection-strict.md")
+ctx = {name: thresholds(ROOT / f"policy/overlays/contexts/{file}.md")
        for name, file in (("Prototype overlay", "prototype-low-risk"), ("Production overlay", "production"), ("Regulated overlay", "regulated-sensitive"))}
 if not base:
     err("baseline file has no 'Tunable thresholds' table")
-doc_rows = parse_table((ROOT / "docs/friction-model.md").read_text(), "Levels and thresholds by context") or []
+doc_rows = parse_table((ROOT / "docs/response-model.md").read_text(), "Levels and thresholds by context") or []
 header = ["Prototype overlay", "Baseline", "Strict", "Production overlay", "Regulated overlay"]
 seen = set()
 for row in doc_rows:
@@ -233,10 +233,27 @@ for row in doc_rows:
         expected[name] = ctx[name].get(key, "unchanged")
     for col, cell in zip(header, row[1:]):
         if cell != expected[col]:
-            err(f"docs/friction-model.md: {key} / {col} is '{cell}', policy files say '{expected[col]}'")
+            err(f"docs/response-model.md: {key} / {col} is '{cell}', policy files say '{expected[col]}'")
 for key in base:
     if key not in seen:
-        err(f"docs/friction-model.md: threshold {key} missing from the context table")
+        err(f"docs/response-model.md: threshold {key} missing from the context table")
+
+# Level counts quoted in docs/response-model.md must match the foundational files.
+dist_rows = parse_table((ROOT / "docs/response-model.md").read_text(), "Distribution of levels") or []
+if len(foundational) == 2:
+    counts = {}
+    for name, path in (("Baseline", "oss-selection-baseline"), ("Strict", "oss-selection-strict")):
+        levels = [r["level"] for r in parse_rules(ROOT / f"policy/foundational/{path}.md").values() if r["level"]]
+        counts[name] = {lvl: levels.count(lvl) for lvl in ("NOTE", "ASK", "BLOCK")}
+    quoted = {row[0]: {"Baseline": int(row[1]), "Strict": int(row[2])} for row in dist_rows if len(row) >= 3}
+    for lvl in ("NOTE", "ASK", "BLOCK"):
+        for name in ("Baseline", "Strict"):
+            if quoted.get(lvl, {}).get(name) != counts[name][lvl]:
+                err(f"docs/response-model.md: {name} {lvl} count should be {counts[name][lvl]}")
+    readme = (ROOT / "README.md").read_text()
+    for lvl in ("NOTE", "ASK", "BLOCK"):
+        if not re.search(rf"\| \*\*{lvl}\*\* \| {counts['Baseline'][lvl]} \|", readme):
+            err(f"README.md: baseline {lvl} count should be {counts['Baseline'][lvl]} in the response-level table")
 
 days = int(base.get("version_cooldown_days", 0))
 enforced = {

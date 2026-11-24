@@ -14,7 +14,7 @@ How to write and structure rules and overlays. For setup, where things live and 
 
 ## File naming
 
-Lowercase, hyphenated, ending in `.skills.md`: `npm-node.skills.md`, `rust-cargo.skills.md`. One variable per file:
+Lowercase, hyphenated, ending in `.md`: `npm-node.md`, `rust-cargo.md`. One variable per file:
 
 | Folder | Variable | Example |
 |---|---|---|
@@ -57,7 +57,7 @@ Context overlays also have a "Level shifts" table and, if they change a number, 
 - Do not restate a foundational rule. Refer to it by ID: "apply AGE-1".
 - Put numbers in a "Tunable thresholds" table, never in rule text, and say whether the default has evidence behind it.
 - Name only tools and settings you have checked exist, and say where you checked.
-- Where a check may be impossible, tell the agent to report `not checked` and not to guess.
+- Where a check may be impossible, tell the agent to report `not checked` and not to guess (EVD-1).
 
 ## Language
 

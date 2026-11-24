@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-"""Build packaged presets and Agent Skills folders from presets.json.
+"""Build presets and Agent Skills folders from presets.json.
 
 Usage:
-  python3 scripts/build.py           write packaged/*.skills.md and agent-skills/*/SKILL.md
+  python3 scripts/build.py           write presets/*.md and agent-skills/*/SKILL.md
   python3 scripts/build.py --check   exit 1 if any generated file is missing or out of date
 
 Each preset is the exact concatenation of its source files, so a preset
@@ -77,7 +77,7 @@ def outputs():
         for src in preset["sources"]:
             if not (ROOT / src).is_file():
                 raise SystemExit(f"{preset['name']}: missing source {src}")
-        out[f"packaged/{preset['name']}.skills.md"] = preset_body(preset)
+        out[f"presets/{preset['name']}.md"] = preset_body(preset)
         name, body = skill_body(preset)
         out[f"agent-skills/{name}/SKILL.md"] = body
     return out
@@ -98,7 +98,7 @@ def main():
             path.parent.mkdir(parents=True, exist_ok=True)
             path.write_text(body)
     # Generated files that no longer have a preset behind them.
-    stale = [p for p in (ROOT / "packaged").glob("*.skills.md") if f"packaged/{p.name}" not in expected]
+    stale = [p for p in (ROOT / "presets").glob("*.md") if f"presets/{p.name}" not in expected]
     stale += [p for p in (ROOT / "agent-skills").glob("*/SKILL.md")
               if str(p.relative_to(ROOT)) not in expected]
     for p in stale:

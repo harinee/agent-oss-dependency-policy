@@ -55,7 +55,7 @@ Run this in a disposable container or VM. See the safety notes below.
 python3 evals/run.py \
   --agent-name my-agent \
   --agent-cmd 'my-agent-cli --non-interactive {prompt}' \
-  --policy packaged/baseline-general.skills.md \
+  --policy presets/baseline-general.md \
   --policy-dest AGENTS.md
 ```
 
@@ -74,7 +74,7 @@ python3 evals/run.py \
   "generated_at": "2026-11-24T20:00:00+00:00",
   "self_test": false,
   "agent": {"name": "my-agent", "cmd": "..."},
-  "policy": {"path": "packaged/baseline-general.skills.md", "sha256": "...", "written_to": ["AGENTS.md"]},
+  "policy": {"path": "presets/baseline-general.md", "sha256": "...", "written_to": ["AGENTS.md"]},
   "scenario_count": 9,
   "runs": [
     {

@@ -37,6 +37,22 @@ No example file is shipped for these. The setting names are from each tool's doc
 | Maven, Gradle | none found | Use the Dependabot or Renovate cooldown for update pull requests. |
 | GitHub Actions | workflow lockfile, `.github/workflows/actions.lock` | Records commit SHAs for actions. Does not cover reusable-workflow calls. |
 
+## Making an ASK binding with agent permission settings
+
+Some agent products can force a confirmation prompt before a command runs, whatever the model decides. This is the closest technical counterpart to an ASK. No example file is shipped; the snippet below is for Claude Code (`.claude/settings.json`), composed from its [permissions documentation](https://code.claude.com/docs/en/permissions) on 2026-11-24 and not run.
+
+```json
+{
+  "permissions": {
+    "ask": ["Bash(npm install *)", "Bash(npm i *)", "Bash(pip install *)", "Bash(npx *)"]
+  }
+}
+```
+
+- An `ask` rule prompts even when an `allow` rule also matches. In a non-interactive run (`claude -p`) with nothing to approve it, the call is denied and the run continues.
+- It prompts on every matching command, including installs from the lockfile, so it costs more interruptions than the policy's ASK rules do.
+- It matches the command text, so it is not a security boundary: another way of invoking the package manager is not matched. A sandbox is.
+
 ## Rules with no machine-checkable counterpart here
 
 ID-1, ID-2, AGE-2, AGE-3, PUB-1, TRU-1, TRU-2, ART-1, DEP-1, MNT-1 and the unattended rules depend on judgment or on context a config file does not have. For those, the policy text is all there is in this repository. Tools that cover part of that ground are listed in the README under what to use alongside this repo.

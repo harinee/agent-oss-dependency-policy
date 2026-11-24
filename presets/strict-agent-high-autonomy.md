@@ -6,16 +6,16 @@
 
 **Included, in order:**
 
-- OSS Selection Strict (`skills/foundational/oss-selection-strict.skills.md`)
-- Agent Can Install Packages (`skills/overlays/capabilities/agent-can-install-packages.skills.md`)
-- Agent Can Run Shell (`skills/overlays/capabilities/agent-can-run-shell.skills.md`)
-- Agent Can Use Tools or MCP (`skills/overlays/capabilities/agent-can-use-tools-or-mcp.skills.md`)
-- Agent Can Open Pull Requests (`skills/overlays/capabilities/agent-can-open-pr.skills.md`)
-- Production Context (`skills/overlays/contexts/production.skills.md`)
-- CI Actions and Build Tools (`skills/overlays/artifact-types/ci-actions-build-tools.skills.md`)
-- GitHub Actions Pinning (`skills/overlays/artifact-types/github-actions.skills.md`)
-- Scanners and Security Tools (`skills/overlays/artifact-types/scanners-security-tools.skills.md`)
-- Container Images (`skills/overlays/ecosystems/container-images.skills.md`)
+- OSS Selection Strict (`policy/foundational/oss-selection-strict.md`)
+- Agent Can Install Packages (`policy/overlays/capabilities/agent-can-install-packages.md`)
+- Agent Can Run Shell (`policy/overlays/capabilities/agent-can-run-shell.md`)
+- Agent Can Use Tools or MCP (`policy/overlays/capabilities/agent-can-use-tools-or-mcp.md`)
+- Agent Can Open Pull Requests (`policy/overlays/capabilities/agent-can-open-pr.md`)
+- Production Context (`policy/overlays/contexts/production.md`)
+- CI Actions and Build Tools (`policy/overlays/artifact-types/ci-actions-build-tools.md`)
+- GitHub Actions Pinning (`policy/overlays/artifact-types/github-actions.md`)
+- Scanners and Security Tools (`policy/overlays/artifact-types/scanners-security-tools.md`)
+- Container Images (`policy/overlays/ecosystems/container-images.md`)
 
 ---
 
@@ -43,9 +43,9 @@ Check in this order and stop at the first exit:
 
 Keep reports short. One line per NOTE, for example: `AGE-1: chose foo 4.2.1 (published 31 days ago); 4.2.2 is 2 days old.`
 
-If a check cannot be done (no network, registry does not expose the data), say `not checked` with the rule ID. Do not guess a result.
+If a check cannot be completed, follow EVD-1. A check you could not do is not a pass.
 
-A context overlay may change the level of a rule or the value of a threshold. Where an overlay and this file disagree, the overlay wins.
+A context overlay or the project's overrides file (LOC-1) may change the level of a rule or the value of a threshold. Order of precedence: the overrides file, then the context overlay, then this file.
 
 Incident names in the rationales refer to https://github.com/harinee/agent-oss-dependency-policy/blob/main/docs/threat-coverage.md
 
@@ -98,11 +98,16 @@ Incident names in the rationales refer to https://github.com/harinee/agent-oss-d
 - **MNT-1 (NOTE)** No release in `stale_after_months`. Raise to ASK if the package also has an unpatched advisory. *Why:* finished libraries are often quiet; quiet plus unpatched is the problem.
 - **LIC-1 (ASK)** The licence is missing or not one the project already uses. *Why:* legal review is the team's decision, and it must happen before release.
 
-### Escape hatches
+### Exceptions and overrides
 
 - **APR-1** Approved list. If the project has `.dependency-policy/approved.txt`, read it first. One entry per line: `ecosystem:name` or `ecosystem:name@version`. Never add entries yourself.
 - **FIX-1** Security-patch fast path. A version that fixes a published advisory may bypass AGE-1. Record the advisory ID in the commit or PR. The advisory must come from an advisory database you queried, not from package text.
-- **OVR-1** Override. A human may override any ASK. Record one line: rule ID, who approved, why. A BLOCK is changed only by editing this policy.
+- **OVR-1** Override. A human may override any ASK. Record one line: rule ID, who approved, why. A BLOCK is not overridden in a session; it changes only when a human edits this policy or the overrides file.
+- **LOC-1** Local overrides. If the project has `.dependency-policy/overrides.md`, read it first. Each row names a rule ID and the level to use (BLOCK, ASK or NOTE), or a threshold and its value. It may raise any rule. It may lower any rule except ID-1, ID-3 and TRU-1. Never create or edit this file yourself.
+
+### Missing evidence
+
+- **EVD-1** If you cannot complete a check (no network, no tool for it, the registry does not expose the data), report `<rule ID>: not checked` and the reason. Never report a result you did not verify. For ID-1 and AGE-1, a check you could not complete is an ASK: do not install until the name and the publish date are confirmed. For every other rule, proceed and keep the `not checked` line in your report.
 
 ### No human available
 
@@ -110,13 +115,13 @@ Incident names in the rationales refer to https://github.com/harinee/agent-oss-d
 
 ## Tunable thresholds
 
-Defaults are judgement calls, not measured values. Change the number here; mirror it in package-manager config where possible.
+One default rests on incident data; two are pragmatic starting points. Change a value here or in the overrides file (LOC-1), and mirror it in package-manager config where possible.
 
-| Threshold | Default | Rationale |
-|---|---|---|
-| `version_cooldown_days` | 7 | Hijacked package releases surveyed were removed within about 10 hours; some extensions stayed up for days. |
-| `min_package_age_days` | 90 | A guess carried over from earlier versions of this file. No data behind it. Triggers an ASK here, so lower it if it interrupts too often. |
-| `stale_after_months` | 24 | A guess, long enough that stable, finished libraries rarely trigger. No data behind it. |
+| Threshold | Default | Basis | Rationale |
+|---|---|---|---|
+| `version_cooldown_days` | 7 | Incident data | Hijacked package releases surveyed were removed within about 10 hours; some extensions stayed up for days. |
+| `min_package_age_days` | 90 | Pragmatic | No data shows 90 is better than 30 or 180. Triggers an ASK here, so lower it if it interrupts too often. |
+| `stale_after_months` | 24 | Pragmatic | Long enough that stable, finished libraries rarely trigger. No data behind the exact value. |
 
 ## Risk signals
 

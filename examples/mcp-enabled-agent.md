@@ -10,11 +10,11 @@ Illustrative. The behaviour described is what the policy asks for, not a recorde
 ## Files
 
 ```
-skills/foundational/oss-selection-baseline.skills.md
-skills/overlays/capabilities/agent-can-install-packages.skills.md
-skills/overlays/capabilities/agent-can-use-tools-or-mcp.skills.md
-skills/overlays/ecosystems/python-pip.skills.md
-skills/overlays/artifact-types/mcp-servers-connectors.skills.md
+policy/foundational/oss-selection-baseline.md
+policy/overlays/capabilities/agent-can-install-packages.md
+policy/overlays/capabilities/agent-can-use-tools-or-mcp.md
+policy/overlays/ecosystems/python-pip.md
+policy/overlays/artifact-types/mcp-servers-connectors.md
 ```
 
 The `agent-tooling` preset covers the MCP part; add the install and Python overlays to it.
@@ -29,4 +29,4 @@ The `agent-tooling` preset covers the MCP part; add the install and Python overl
 
 ## For production or regulated data
 
-Add `skills/overlays/contexts/production.skills.md` or `skills/overlays/contexts/regulated-sensitive.skills.md`.
+Add `policy/overlays/contexts/production.md` or `policy/overlays/contexts/regulated-sensitive.md`.

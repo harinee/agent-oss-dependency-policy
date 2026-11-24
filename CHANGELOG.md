@@ -6,6 +6,11 @@ Notable changes to this project are recorded here.
 
 ### Added
 
+- EVD-1, missing evidence: a check that could not be completed is never a pass; unconfirmed package
+  existence (ID-1) or version age (AGE-1) is an ASK, other checks proceed with `not checked`.
+- LOC-1, local overrides: `.dependency-policy/overrides.md` changes rule levels and thresholds without
+  editing the preset. ID-1, ID-3 and TRU-1 cannot be lowered there. Template in `examples/`.
+
 - Rule IDs, a response level (BLOCK, ASK or NOTE) and a one-line rationale on every rule.
 - Version-age cooldown (AGE-1), kept separate from package age and publisher change.
 - "Tunable thresholds" table in each foundational file; defaults are labelled as hypotheses.
@@ -20,17 +25,26 @@ Notable changes to this project are recorded here.
 - `enforcement/`: example package-manager, Dependabot and Renovate config, and a pin checker.
 - `evals/`: scenario harness reporting catch rate and friction rate. No agent results are included.
 - `scripts/build.py`, `scripts/selfcheck.py` and a CI workflow.
-- `docs/threat-coverage.md`, `docs/friction-model.md`, `docs/packaging.md`, `docs/limitations.md`.
+- `docs/threat-coverage.md`, `docs/response-model.md`, `docs/packaging.md`, `docs/limitations.md`.
 - `CONTRIBUTING.md`, `SECURITY.md`, a `Makefile`, and issue and pull request templates.
 
 ### Changed
+
+- **Renamed directories and files (breaking for copied paths).** `skills/` is now `policy/` and
+  `packaged/` is now `presets/`; the `.skills.md` suffix is dropped (`packaged/baseline-general.skills.md`
+  is now `presets/baseline-general.md`). The old names suggested these files were Agent Skills; only
+  `agent-skills/` is. Preset names and `agent-skills/` paths are unchanged.
+- The friction-model doc is now `docs/response-model.md` and explains each level by severity and
+  confidence, with the count of rules per level checked by `scripts/selfcheck.py`.
+- README and quick start rewritten around one adoption path: install one preset, per-agent commands,
+  always-on versus on-demand, and what is advisory versus enforced.
 
 - Presets are generated from `presets.json` as exact concatenations of their sources.
   Existing preset file names are unchanged; their content is longer and uses the new rules.
 - Overlays refer to foundational rules by ID and no longer restate them.
 - `npm-high-autonomy` now includes the unattended overlay.
 - `docs/mapping-to-standards.md` cut down to mappings checked against the source.
-- `examples/*.skills.md` renamed to `examples/*.md`; they are documents, not policy files.
+- `examples/*.md` renamed to `examples/*.md`; they are documents, not policy files.
 - Background docs rewritten in the same plain style as the README; emoji headings removed.
 - Install instructions now use `AGENTS.md` and locations checked against each agent's documentation.
 

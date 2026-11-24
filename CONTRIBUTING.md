@@ -18,10 +18,10 @@ make check
 
 | Path | What it is | Edit it? |
 |---|---|---|
-| `skills/foundational/` | The rule set, in a baseline and a strict version | Yes. Keep rule text identical in both; only levels differ. |
-| `skills/overlays/` | Additions per capability, ecosystem, artifact type and context | Yes |
+| `policy/foundational/` | The rule set, in a baseline and a strict version | Yes. Keep rule text identical in both; only levels differ. |
+| `policy/overlays/` | Additions per capability, ecosystem, artifact type and context | Yes |
 | `presets.json` | Which sources make up each preset | Yes |
-| `packaged/`, `agent-skills/` | Generated from the above | No. Run `make build`. |
+| `presets/`, `agent-skills/` | Generated from the above | No. Run `make build`. |
 | `enforcement/` | Config and scripts that back rules | Yes |
 | `evals/` | Scenarios and the runner | Yes |
 | `docs/` | Documentation | Yes |
@@ -31,7 +31,7 @@ make check
 **Report a rule that misfired.** Open an issue with the "Rule misfired" template. False positives are the most useful feedback this project can get, because a policy that interrupts too often gets switched off.
 
 **Change or add a rule.**
-1. Edit the file under `skills/`. A rule line looks like `- **PREFIX-N (NOTE)** What to do. *Why:* one line.`, with the next free number for that file's prefix.
+1. Edit the file under `policy/`. A rule line looks like `- **PREFIX-N (NOTE)** What to do. *Why:* one line.`, with the next free number for that file's prefix.
 2. Default to `NOTE`. In the pull request, say why any `ASK` or `BLOCK` is worth the interruption.
 3. For a foundational rule, make the same change in both foundational files.
 4. `make build && make check`.
@@ -41,7 +41,7 @@ make check
 2. Add it to a preset in `presets.json` and to the tables in `docs/how-to-choose.md`. The self-check fails until both are done.
 3. `make build && make check`.
 
-**Change a threshold default.** Edit the "Tunable thresholds" table in both foundational files, the table in `docs/friction-model.md`, and the values in `enforcement/`. The self-check tells you which ones you missed. State your source, or say there is none.
+**Change a threshold default.** Edit the "Tunable thresholds" table in both foundational files, the table in `docs/response-model.md`, and the values in `enforcement/`. The self-check tells you which ones you missed. State your source, or say there is none.
 
 **Add an incident to `docs/threat-coverage.md`.** Give one dated source, say whether it passes the scope test at the top of that page, and name the rule that addresses it or the gap.
 

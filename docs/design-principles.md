@@ -1,6 +1,6 @@
 # Design principles
 
-The reasoning behind the rules. The rules themselves, with IDs and response levels, are in `skills/foundational/`. How levels are assigned is in [friction-model.md](friction-model.md).
+The reasoning behind the rules. The rules themselves, with IDs and response levels, are in `policy/foundational/`. How levels are assigned is in [response-model.md](response-model.md).
 
 One principle sits above the rest: **every rule has to justify the interruption it causes.** A policy that asks too often gets switched off, and then it protects nothing.
 

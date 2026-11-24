@@ -11,10 +11,10 @@ Illustrative. The behaviour described is what the policy asks for, not a recorde
 ## Files
 
 ```
-skills/foundational/oss-selection-baseline.skills.md
-skills/overlays/capabilities/agent-can-install-packages.skills.md
-skills/overlays/capabilities/agent-can-run-shell.skills.md
-skills/overlays/ecosystems/npm-node.skills.md
+policy/foundational/oss-selection-baseline.md
+policy/overlays/capabilities/agent-can-install-packages.md
+policy/overlays/capabilities/agent-can-run-shell.md
+policy/overlays/ecosystems/npm-node.md
 ```
 
 The first three are the `baseline-general` preset; the npm overlay is added to it.
@@ -29,6 +29,6 @@ The first three are the `baseline-general` preset; the npm overlay is added to i
 
 ## Moving on
 
-- Going to production: switch to the strict foundation or add `skills/overlays/contexts/production.skills.md`.
-- Adding CI: add `skills/overlays/artifact-types/github-actions.skills.md`.
-- The agent opens pull requests: add `skills/overlays/capabilities/agent-can-open-pr.skills.md`.
+- Going to production: switch to the strict foundation or add `policy/overlays/contexts/production.md`.
+- Adding CI: add `policy/overlays/artifact-types/github-actions.md`.
+- The agent opens pull requests: add `policy/overlays/capabilities/agent-can-open-pr.md`.

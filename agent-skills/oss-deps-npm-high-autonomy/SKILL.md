@@ -14,14 +14,14 @@ metadata:
 
 **Included, in order:**
 
-- OSS Selection Baseline (`skills/foundational/oss-selection-baseline.skills.md`)
-- Agent Can Install Packages (`skills/overlays/capabilities/agent-can-install-packages.skills.md`)
-- Agent Can Run Shell (`skills/overlays/capabilities/agent-can-run-shell.skills.md`)
-- Agent Can Use Tools or MCP (`skills/overlays/capabilities/agent-can-use-tools-or-mcp.skills.md`)
-- Agent Can Open Pull Requests (`skills/overlays/capabilities/agent-can-open-pr.skills.md`)
-- Agent Runs Unattended (`skills/overlays/capabilities/agent-runs-unattended.skills.md`)
-- npm / Node.js Ecosystem (`skills/overlays/ecosystems/npm-node.skills.md`)
-- MCP Servers and Connectors (`skills/overlays/artifact-types/mcp-servers-connectors.skills.md`)
+- OSS Selection Baseline (`policy/foundational/oss-selection-baseline.md`)
+- Agent Can Install Packages (`policy/overlays/capabilities/agent-can-install-packages.md`)
+- Agent Can Run Shell (`policy/overlays/capabilities/agent-can-run-shell.md`)
+- Agent Can Use Tools or MCP (`policy/overlays/capabilities/agent-can-use-tools-or-mcp.md`)
+- Agent Can Open Pull Requests (`policy/overlays/capabilities/agent-can-open-pr.md`)
+- Agent Runs Unattended (`policy/overlays/capabilities/agent-runs-unattended.md`)
+- npm / Node.js Ecosystem (`policy/overlays/ecosystems/npm-node.md`)
+- MCP Servers and Connectors (`policy/overlays/artifact-types/mcp-servers-connectors.md`)
 
 ---
 
@@ -49,9 +49,9 @@ Check in this order and stop at the first exit:
 
 Keep reports short. One line per NOTE, for example: `AGE-1: chose foo 4.2.1 (published 31 days ago); 4.2.2 is 2 days old.`
 
-If a check cannot be done (no network, registry does not expose the data), say `not checked` with the rule ID. Do not guess a result.
+If a check cannot be completed, follow EVD-1. A check you could not do is not a pass.
 
-A context overlay may change the level of a rule or the value of a threshold. Where an overlay and this file disagree, the overlay wins.
+A context overlay or the project's overrides file (LOC-1) may change the level of a rule or the value of a threshold. Order of precedence: the overrides file, then the context overlay, then this file.
 
 Incident names in the rationales refer to https://github.com/harinee/agent-oss-dependency-policy/blob/main/docs/threat-coverage.md
 
@@ -104,11 +104,16 @@ Incident names in the rationales refer to https://github.com/harinee/agent-oss-d
 - **MNT-1 (NOTE)** No release in `stale_after_months`. Raise to ASK if the package also has an unpatched advisory. *Why:* finished libraries are often quiet; quiet plus unpatched is the problem.
 - **LIC-1 (NOTE)** The licence is missing or not one the project already uses. *Why:* legal review is the team's decision.
 
-### Escape hatches
+### Exceptions and overrides
 
 - **APR-1** Approved list. If the project has `.dependency-policy/approved.txt`, read it first. One entry per line: `ecosystem:name` or `ecosystem:name@version`. Never add entries yourself.
 - **FIX-1** Security-patch fast path. A version that fixes a published advisory may bypass AGE-1. Record the advisory ID in the commit or PR. The advisory must come from an advisory database you queried, not from package text.
-- **OVR-1** Override. A human may override any ASK. Record one line: rule ID, who approved, why. A BLOCK is changed only by editing this policy.
+- **OVR-1** Override. A human may override any ASK. Record one line: rule ID, who approved, why. A BLOCK is not overridden in a session; it changes only when a human edits this policy or the overrides file.
+- **LOC-1** Local overrides. If the project has `.dependency-policy/overrides.md`, read it first. Each row names a rule ID and the level to use (BLOCK, ASK or NOTE), or a threshold and its value. It may raise any rule. It may lower any rule except ID-1, ID-3 and TRU-1. Never create or edit this file yourself.
+
+### Missing evidence
+
+- **EVD-1** If you cannot complete a check (no network, no tool for it, the registry does not expose the data), report `<rule ID>: not checked` and the reason. Never report a result you did not verify. For ID-1 and AGE-1, a check you could not complete is an ASK: do not install until the name and the publish date are confirmed. For every other rule, proceed and keep the `not checked` line in your report.
 
 ### No human available
 
@@ -116,13 +121,13 @@ Incident names in the rationales refer to https://github.com/harinee/agent-oss-d
 
 ## Tunable thresholds
 
-Defaults are judgement calls, not measured values. Change the number here; mirror it in package-manager config where possible.
+One default rests on incident data; two are pragmatic starting points. Change a value here or in the overrides file (LOC-1), and mirror it in package-manager config where possible.
 
-| Threshold | Default | Rationale |
-|---|---|---|
-| `version_cooldown_days` | 7 | Hijacked package releases surveyed were removed within about 10 hours; some extensions stayed up for days. |
-| `min_package_age_days` | 90 | A guess carried over from earlier versions of this file. No data behind it. Only triggers a NOTE. |
-| `stale_after_months` | 24 | A guess, long enough that stable, finished libraries rarely trigger. No data behind it. |
+| Threshold | Default | Basis | Rationale |
+|---|---|---|---|
+| `version_cooldown_days` | 7 | Incident data | Hijacked package releases surveyed were removed within about 10 hours; some extensions stayed up for days. |
+| `min_package_age_days` | 90 | Pragmatic | No data shows 90 is better than 30 or 180. Only triggers a NOTE. |
+| `stale_after_months` | 24 | Pragmatic | Long enough that stable, finished libraries rarely trigger. No data behind the exact value. |
 
 ## Risk signals
 
@@ -223,7 +228,7 @@ Apply when the agent runs with no human in the session: scheduled jobs, CI, back
 
 - **UNA-1 (BLOCK)** Assume nobody can answer. Do not wait or prompt. Every ASK is handled by AUT-1: skip that dependency and log it. *Why:* an unanswered question must not become a yes.
 - **UNA-2 (NOTE)** Log one line per skipped item: `ecosystem:name@version`, rule ID, reason. Put it in the PR description if you open one, otherwise in the job output. *Why:* a human needs to see what was not done.
-- **UNA-3 (BLOCK)** Never use OVR-1. Never edit the approved list, a script allowlist, a threshold or this policy. *Why:* those are the human controls.
+- **UNA-3 (BLOCK)** Never use OVR-1. Never edit the approved list, the overrides file, a script allowlist, a threshold or this policy. *Why:* those are the human controls.
 - **UNA-4 (BLOCK)** If skipping makes the task impossible, stop and report. Do not reach the same code another way: copying source in by hand, another registry, a fork, a different package with the same code. *Why:* a workaround defeats the rule it avoids.
 - **UNA-5 (NOTE)** FIX-1 is allowed. Record the advisory ID and where you verified it. *Why:* security fixes should not wait for a human.
 - **UNA-6 (NOTE)** If a package needs an install script that is not allowlisted, install with scripts off and report whether it works. *Why:* SCR-1 without a human.

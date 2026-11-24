@@ -1,6 +1,13 @@
 # How to choose
 
-Start with a preset. Build your own combination only if none fits.
+Install **one preset**. A preset already contains a foundational rule set and the overlays that suit its use case, so there is nothing else to install. Build your own combination only if no preset fits.
+
+| Term | What it is | Do you install it? |
+|---|---|---|
+| Preset | One ready-made file: a foundational rule set plus bundled overlays | **Yes, exactly one** |
+| Foundational file | The rule set itself: `baseline` or `strict` | Only inside a preset or your own combination |
+| Overlay | Extra rules for a capability, ecosystem, artifact type or context. Additive; incomplete on its own. | Only to extend a preset |
+| Agent Skill | The same preset in the on-demand Agent Skills format | Instead of the preset file, not as well as it |
 
 ## Presets
 
@@ -20,7 +27,16 @@ Start with a preset. Build your own combination only if none fits.
 
 Each preset file lists exactly what it includes at the top. The definitions are in [`presets.json`](../presets.json).
 
-A project that spans several of these can concatenate two presets' overlays; see "Building your own" below.
+### A preset is close but not exact
+
+Overlays are additive. Append the missing one to the preset:
+
+```bash
+# Node.js project, human in the session: baseline-general plus the npm overlay
+cat presets/baseline-general.md policy/overlays/ecosystems/npm-node.md > my-policy.md
+```
+
+Do not join two presets: each carries its own copy of the foundational rules.
 
 ## Building your own
 
@@ -30,31 +46,31 @@ A combination is one foundational file plus any overlays.
 
 | File | Use for |
 |---|---|
-| `skills/foundational/oss-selection-baseline.skills.md` | General development, internal tools |
-| `skills/foundational/oss-selection-strict.skills.md` | Production and sensitive systems. Same rules; three levels are stricter. |
+| `policy/foundational/oss-selection-baseline.md` | General development, internal tools |
+| `policy/foundational/oss-selection-strict.md` | Production and sensitive systems. Same rules; three levels are stricter. |
 
 ### 2. Capabilities (what the agent can do)
 
 | If the agent can | Add |
 |---|---|
-| Run install commands | `skills/overlays/capabilities/agent-can-install-packages.skills.md` |
-| Run shell commands | `skills/overlays/capabilities/agent-can-run-shell.skills.md` |
-| Add or call tools and MCP servers | `skills/overlays/capabilities/agent-can-use-tools-or-mcp.skills.md` |
-| Commit or open pull requests | `skills/overlays/capabilities/agent-can-open-pr.skills.md` |
-| Run with no human in the session | `skills/overlays/capabilities/agent-runs-unattended.skills.md` |
+| Run install commands | `policy/overlays/capabilities/agent-can-install-packages.md` |
+| Run shell commands | `policy/overlays/capabilities/agent-can-run-shell.md` |
+| Add or call tools and MCP servers | `policy/overlays/capabilities/agent-can-use-tools-or-mcp.md` |
+| Commit or open pull requests | `policy/overlays/capabilities/agent-can-open-pr.md` |
+| Run with no human in the session | `policy/overlays/capabilities/agent-runs-unattended.md` |
 
 ### 3. Ecosystems (any number)
 
 | Project uses | Add |
 |---|---|
-| npm, pnpm, Yarn, Bun | `skills/overlays/ecosystems/npm-node.skills.md` |
-| pip, uv, Poetry, PDM | `skills/overlays/ecosystems/python-pip.skills.md` |
-| Maven, Gradle | `skills/overlays/ecosystems/java-maven-gradle.skills.md` |
-| Go modules | `skills/overlays/ecosystems/go-modules.skills.md` |
-| Cargo | `skills/overlays/ecosystems/rust-cargo.skills.md` |
-| NuGet | `skills/overlays/ecosystems/dotnet-nuget.skills.md` |
-| Bundler, RubyGems | `skills/overlays/ecosystems/ruby-bundler.skills.md` |
-| Container images | `skills/overlays/ecosystems/container-images.skills.md` |
+| npm, pnpm, Yarn, Bun | `policy/overlays/ecosystems/npm-node.md` |
+| pip, uv, Poetry, PDM | `policy/overlays/ecosystems/python-pip.md` |
+| Maven, Gradle | `policy/overlays/ecosystems/java-maven-gradle.md` |
+| Go modules | `policy/overlays/ecosystems/go-modules.md` |
+| Cargo | `policy/overlays/ecosystems/rust-cargo.md` |
+| NuGet | `policy/overlays/ecosystems/dotnet-nuget.md` |
+| Bundler, RubyGems | `policy/overlays/ecosystems/ruby-bundler.md` |
+| Container images | `policy/overlays/ecosystems/container-images.md` |
 
 Ecosystems without an overlay (for example PHP) still get the foundational rules, without ecosystem-specific commands.
 
@@ -62,31 +78,31 @@ Ecosystems without an overlay (for example PHP) still get the foundational rules
 
 | Agent may add or change | Add |
 |---|---|
-| CI workflows and build tools | `skills/overlays/artifact-types/ci-actions-build-tools.skills.md` |
-| GitHub Actions references | `skills/overlays/artifact-types/github-actions.skills.md` |
-| MCP servers and connectors | `skills/overlays/artifact-types/mcp-servers-connectors.skills.md` |
-| Scanners and security tools | `skills/overlays/artifact-types/scanners-security-tools.skills.md` |
-| Editor extensions | `skills/overlays/artifact-types/ide-extensions.skills.md` |
-| Third-party agent skills, rules, hooks | `skills/overlays/artifact-types/agent-skills.skills.md` |
+| CI workflows and build tools | `policy/overlays/artifact-types/ci-actions-build-tools.md` |
+| GitHub Actions references | `policy/overlays/artifact-types/github-actions.md` |
+| MCP servers and connectors | `policy/overlays/artifact-types/mcp-servers-connectors.md` |
+| Scanners and security tools | `policy/overlays/artifact-types/scanners-security-tools.md` |
+| Editor extensions | `policy/overlays/artifact-types/ide-extensions.md` |
+| Third-party agent skills, rules, hooks | `policy/overlays/artifact-types/agent-skills.md` |
 
 ### 5. Context (at most one)
 
 | Context | Add |
 |---|---|
-| Prototype | `skills/overlays/contexts/prototype-low-risk.skills.md` |
-| Production | `skills/overlays/contexts/production.skills.md` |
-| Regulated or sensitive | `skills/overlays/contexts/regulated-sensitive.skills.md` |
+| Prototype | `policy/overlays/contexts/prototype-low-risk.md` |
+| Production | `policy/overlays/contexts/production.md` |
+| Regulated or sensitive | `policy/overlays/contexts/regulated-sensitive.md` |
 
-What each context changes is tabled in [friction-model.md](friction-model.md).
+What each context changes is tabled in [response-model.md](response-model.md#levels-and-thresholds-by-context).
 
 ### Join them
 
 ```bash
-cat skills/foundational/oss-selection-strict.skills.md \
-    skills/overlays/capabilities/agent-can-install-packages.skills.md \
-    skills/overlays/ecosystems/python-pip.skills.md \
-    skills/overlays/ecosystems/container-images.skills.md \
-    skills/overlays/contexts/production.skills.md \
+cat policy/foundational/oss-selection-strict.md \
+    policy/overlays/capabilities/agent-can-install-packages.md \
+    policy/overlays/ecosystems/python-pip.md \
+    policy/overlays/ecosystems/container-images.md \
+    policy/overlays/contexts/production.md \
     > my-policy.md
 ```
 
@@ -109,5 +125,5 @@ Put the foundational file first. Then copy `my-policy.md` to where your agent re
 | The project goes to production | Move to strict, or add the production overlay |
 | The agent gains a capability | Add the matching capability overlay |
 | The agent starts running unattended | Add `agent-runs-unattended` |
-| The policy interrupts too often | Add packages to the approved list, or adjust a threshold. See [friction-model.md](friction-model.md). |
+| The policy interrupts too often, or not enough | Add packages to the approved list, or change a level or threshold in the overrides file. See [response-model.md](response-model.md#customizing). |
 | A supply-chain incident affects you | Check [threat-coverage.md](threat-coverage.md) for the rule involved |

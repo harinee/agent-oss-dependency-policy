@@ -6,7 +6,7 @@ Usage:
       Check the harness itself with scripted stand-ins. No agent is run.
 
   python3 evals/run.py --agent-name NAME --agent-cmd 'CLI ... {prompt}' \\
-      --policy packaged/baseline-general.skills.md [--policy-dest AGENTS.md]
+      --policy presets/baseline-general.md [--policy-dest AGENTS.md]
       Run every scenario twice: once in a workspace containing the policy,
       once without it. Writes a results JSON file.
 

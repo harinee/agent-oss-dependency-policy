@@ -2,7 +2,7 @@
 
 .PHONY: build check selfcheck pins evals-selftest
 
-build:            ## Regenerate packaged/ and agent-skills/ from presets.json
+build:            ## Regenerate presets/ and agent-skills/ from presets.json
 	python3 scripts/build.py
 
 check: selfcheck pins evals-selftest  ## Run everything CI runs

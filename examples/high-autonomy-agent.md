@@ -12,11 +12,11 @@ Illustrative. The behaviour described is what the policy asks for, not a recorde
 The `strict-agent-high-autonomy` preset plus the Java overlay:
 
 ```
-packaged/strict-agent-high-autonomy.skills.md
-skills/overlays/ecosystems/java-maven-gradle.skills.md
+presets/strict-agent-high-autonomy.md
+policy/overlays/ecosystems/java-maven-gradle.md
 ```
 
-If the agent also runs with no human in the session, add `skills/overlays/capabilities/agent-runs-unattended.skills.md`.
+If the agent also runs with no human in the session, add `policy/overlays/capabilities/agent-runs-unattended.md`.
 
 ## What the policy asks for
 
