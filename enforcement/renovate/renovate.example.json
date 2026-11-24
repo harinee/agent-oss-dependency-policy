@@ -1,0 +1,5 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "description": "Mirrors AGE-1 for update pull requests. Renovate's security updates bypass minimumReleaseAge, which matches FIX-1.",
+  "minimumReleaseAge": "7 days"
+}

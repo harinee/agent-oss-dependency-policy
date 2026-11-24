@@ -1,0 +1,11 @@
+# Merge into .pre-commit-config.yaml. Copy enforcement/ci/check_pins.py into
+# your repository first (the path below assumes tools/check_pins.py).
+
+repos:
+  - repo: local
+    hooks:
+      - id: dependency-pins
+        name: dependency pin check
+        entry: python3 tools/check_pins.py
+        language: system
+        pass_filenames: false

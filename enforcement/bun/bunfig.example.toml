@@ -1,0 +1,8 @@
+# Merge into bunfig.toml.
+# Mirrors: AGE-1 (version cooldown).
+# Bun does not run dependency lifecycle scripts unless the package is in
+# "trustedDependencies" in package.json, so SCR-1 needs no setting here.
+
+[install]
+# Seconds. 604800 = 7 days. Requires Bun 1.3 or later.
+minimumReleaseAge = 604800

@@ -1,0 +1,20 @@
+# Copy to .github/workflows/dependency-pins.yml. Copy enforcement/ci/check_pins.py
+# into your repository first (the path below assumes tools/check_pins.py).
+
+name: dependency-pins
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - run: python3 tools/check_pins.py
