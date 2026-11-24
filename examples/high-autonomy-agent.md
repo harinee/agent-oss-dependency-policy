@@ -20,7 +20,7 @@ If the agent also runs with no human in the session, add `policy/overlays/capabi
 
 ## What the policy asks for
 
-**Adding a library.** The agent checks that the coordinates exist and belong to the intended project, applies the 7-day cooldown itself (Maven and Gradle have no setting for it), uses an exact version and lists the change in the pull request. A package first published within 90 days is an ASK under the strict foundation.
+**Adding a library.** The agent checks that the coordinates exist and belong to the intended project, applies the 3-day cooldown itself (Maven and Gradle have no setting for it), uses an exact version and lists the change in the pull request. A package first published within 90 days is an ASK under the strict foundation.
 
 **Updating the base image.** The agent changes the tag and the digest together, obtains the digest from the registry, and says which version it moved to.
 

@@ -1,9 +1,9 @@
 # Copy to .npmrc in the project root.
 # Mirrors: AGE-1 (version cooldown), SCR-1 (install scripts off), PIN-1 (exact versions).
 
-# Refuse versions published less than 7 days ago. Requires npm 11.10.0 or later;
+# Refuse versions published less than 3 days ago. Requires npm 11.10.0 or later;
 # older npm versions print an "Unknown project config" warning and do not apply it.
-min-release-age=7
+min-release-age=3
 
 # Do not run lifecycle scripts. This also skips the project's own pre/post
 # scripts, so call build steps explicitly. npm 12 blocks dependency scripts by

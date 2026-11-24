@@ -1,7 +1,7 @@
 # Copy to .github/dependabot.yml and adjust the ecosystem.
 # Mirrors: AGE-1 for update pull requests.
 # The cooldown applies to version updates only. Security updates are not delayed,
-# which matches the security-patch fast path (FIX-1).
+# which matches the security-fix fast path (FIX-1).
 
 version: 2
 updates:
@@ -10,4 +10,4 @@ updates:
     schedule:
       interval: "weekly"
     cooldown:
-      default-days: 7
+      default-days: 3

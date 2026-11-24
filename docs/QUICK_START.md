@@ -122,7 +122,7 @@ npm:express
 pypi:requests
 ```
 
-The defaults are a 7-day version cooldown, 90 days for a "new" package and 24 months for "stale". What each protects against and when to change it: [response-model.md](response-model.md#thresholds).
+The defaults are a 3-day version cooldown (7 days for MCP servers and editor extensions), 90 days for a "new" package and 24 months for "stale". What each protects against and when to change it: [response-model.md](response-model.md#thresholds).
 
 ## Updating
 

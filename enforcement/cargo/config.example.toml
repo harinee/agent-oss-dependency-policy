@@ -2,4 +2,4 @@
 # Mirrors: AGE-1 (version cooldown). Requires Rust 1.100 or later; check `cargo --version`.
 
 [registry]
-global-min-publish-age = "7 days"
+global-min-publish-age = "3 days"

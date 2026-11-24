@@ -264,7 +264,7 @@ enforced = {
     "enforcement/cargo/config.example.toml": rf'^global-min-publish-age = "{days} days"$',
     "enforcement/dependabot/dependabot.example.yml": rf"^\s+default-days: {days}$",
     "enforcement/renovate/renovate.example.json": rf'"minimumReleaseAge": "{days} days"',
-    "enforcement/yarn/yarnrc.example.yml": r'^npmMinimalAgeGate: "1w"$' if days == 7 else r"^$never",
+    "enforcement/yarn/yarnrc.example.yml": rf'^npmMinimalAgeGate: "{days}d"$',
 }
 for file, pattern in enforced.items():
     if not re.search(pattern, (ROOT / file).read_text(), re.M):
@@ -272,7 +272,7 @@ for file, pattern in enforced.items():
 for file in ("docs/QUICK_START.md", "README.md"):
     text = (ROOT / file).read_text()
     for m in re.finditer(r"(\d+)-day (?:version )?cooldown", text):
-        if int(m.group(1)) not in {days} | {int(v[k]) for v in ctx.values() for k in v if k == "version_cooldown_days"}:
+        if int(m.group(1)) not in {days, int(base.get("tool_cooldown_days", days))} | {int(v[k]) for v in ctx.values() for k in v if k == "version_cooldown_days"}:
             err(f"{file}: mentions a {m.group(1)}-day cooldown that no policy table defines")
 
 # 9: scenarios ----------------------------------------------------------------------------

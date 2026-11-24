@@ -2,5 +2,5 @@
 # Mirrors: AGE-1 (version cooldown).
 
 [tool.uv]
-# Ignore distributions uploaded in the last 7 days.
-exclude-newer = "7 days"
+# Ignore distributions uploaded in the last 3 days.
+exclude-newer = "3 days"

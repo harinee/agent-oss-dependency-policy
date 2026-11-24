@@ -4,7 +4,24 @@ Notable changes to this project are recorded here.
 
 ## Unreleased
 
+### Changed
+
+- `version_cooldown_days` default lowered from 7 to 3, matching the Dependabot and Renovate defaults.
+  All `enforcement/` examples use 3 days.
+- New threshold `tool_cooldown_days` (default 7) for MCP servers and editor extensions, where
+  malicious versions have stayed available for days.
+- FIX-1, security-fix fast path: checked before the cooldown. A fix for a high, critical or
+  known-exploited advisory installs without waiting when the advisory database names the version as
+  fixed and the publisher is unchanged. Claims in package text do not count.
+- Every ASK and BLOCK message states what was found, why it is a risk and the safe options.
+- README rewritten around numbered setup steps and a day-to-day table. The incident tables moved to
+  `docs/why-this-exists.md`; the companion-controls and status tables moved to `docs/limitations.md`.
+
 ### Added
+
+- FIX-2: the agent never disables the cooldown, install-script blocking or lockfile checks itself,
+  except for a single install approved under FIX-1 or OVR-1.
+- `enforcement/README.md`: lifting the cooldown for one install (`npm install ... --min-release-age=0`).
 
 - EVD-1, missing evidence: a check that could not be completed is never a pass; unconfirmed package
   existence (ID-1) or version age (AGE-1) is an ASK, other checks proceed with `not checked`.

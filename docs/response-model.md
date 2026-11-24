@@ -18,8 +18,8 @@ Severity alone does not set the response. A high-severity signal with many innoc
 
 | Response | The agent | Used when |
 |---|---|---|
-| **BLOCK** | Stops, names the rule, offers an alternative | High severity **and** high confidence: there is no legitimate reason to proceed |
-| **ASK** | States the finding in one or two lines and waits | High severity, but the signal has legitimate explanations, or the action is privileged enough that a human should own it. The human has context the agent lacks. |
+| **BLOCK** | Stops, and says what it found, why it is a risk and the safe way forward | High severity **and** high confidence: there is no legitimate reason to proceed |
+| **ASK** | Says what it found, why it is a risk and the safe options, then waits | High severity, but the signal has legitimate explanations, or the action is privileged enough that a human should own it. The human has context the agent lacks. |
 | **NOTE** | Proceeds and reports in one line | The signal is weak on its own, **or** the agent can take the safe path without help and only needs to say so |
 
 ## Distribution of levels
@@ -100,7 +100,8 @@ The baseline and strict foundational files carry default levels. A context overl
 
 | Rule or threshold | Prototype overlay | Baseline | Strict | Production overlay | Regulated overlay |
 |---|---|---|---|---|---|
-| `version_cooldown_days` | 1 | 7 | 7 | unchanged | 14 |
+| `version_cooldown_days` | 1 | 3 | 3 | unchanged | 14 |
+| `tool_cooldown_days` | unchanged | 7 | 7 | unchanged | unchanged |
 | `min_package_age_days` | unchanged | 90 | 90 | unchanged | unchanged |
 | `stale_after_months` | unchanged | 24 | 24 | unchanged | unchanged |
 | AGE-2 new package | unchanged | NOTE | ASK | ASK | ASK |
@@ -115,19 +116,30 @@ The BLOCK rules (ID-1, ID-3, TRU-1) and the install-script rule (SCR-1) are the 
 
 ## Thresholds
 
-One threshold rests on incident data. Two are pragmatic defaults: a number someone had to pick, with no evidence that it beats its neighbours. They are defined in the "Tunable thresholds" table of each foundational file: [baseline](../policy/foundational/oss-selection-baseline.md#tunable-thresholds), [strict](../policy/foundational/oss-selection-strict.md#tunable-thresholds).
+Two thresholds rest on incident data. Two are pragmatic defaults: a number someone had to pick, with no evidence that it beats its neighbours. They are defined in the "Tunable thresholds" table of each foundational file: [baseline](../policy/foundational/oss-selection-baseline.md#tunable-thresholds), [strict](../policy/foundational/oss-selection-strict.md#tunable-thresholds).
 
-### `version_cooldown_days` (default 7)
+### `version_cooldown_days` (default 3)
 
 | | |
 |---|---|
 | Protects against | A hijacked or malicious **new release of an established package**, during the window before it is detected and removed |
 | Used by | AGE-1 |
-| Basis | **Incident data.** Of the incidents in [threat-coverage.md](threat-coverage.md) that state a removal time, the six package releases were gone within about 10 hours. GlassWorm extensions stayed available for at least three days. Package-manager defaults are shorter: pnpm 11 and Yarn 4.15 use 1 day, Dependabot 3 days. Seven days is a margin over the observed times, not a measurement. |
-| Trade-off | Every new release is delayed by a week, including bug fixes with no published advisory. Fixes that do have an advisory skip the wait (FIX-1). The cooldown only works because other people find bad releases first; a release nobody detects within the window passes. |
+| Basis | **Incident data.** Of the incidents in [threat-coverage.md](threat-coverage.md) that state a removal time, the six package releases were gone within about 10 hours. GlassWorm extensions stayed available for at least three days. That is why MCP servers and extensions have their own, longer threshold below. Tool defaults: pnpm 11 and Yarn 4.15 use 1 day; Dependabot and Renovate use 3 days. Practitioner guidance ranges from 3 to 7 days, and no published measurement shows that 7 catches more package incidents than 3. Three days is a margin over the observed times and matches the update tools, so a version they propose is not refused locally. |
+| Trade-off | Every new release is delayed by three days, including bug fixes with no published advisory. A fix for a high or critical advisory, confirmed in an advisory database, skips the wait (FIX-1). The cooldown only works because other people find bad releases first; a release nobody detects within the window passes. |
 | Lower it when | Prototypes (the prototype overlay uses 1), or a dependency you release yourself and need at once (better: put that package on the approved list and pin it) |
-| Raise it when | Regulated or sensitive systems (the regulated overlay uses 14), or MCP servers and extensions, where malicious versions have stayed up for days to a week |
+| Raise it when | Regulated or sensitive systems (the regulated overlay uses 14), or if you want more margin than the update tools' defaults (7 is the upper end of common guidance) |
 | Enforce it | In the package manager, so it also covers transitive dependencies and does not depend on the agent: [`enforcement/`](../enforcement/README.md) |
+
+### `tool_cooldown_days` (default 7)
+
+| | |
+|---|---|
+| Protects against | A malicious **new version of an MCP server or editor extension**, which runs with the agent's or the editor's access |
+| Used by | AGE-1, through MCP-4 and EXT-3. It applies when it is longer than `version_cooldown_days`. |
+| Basis | **Incident data.** GlassWorm extensions were still downloadable three days after publication, and the malicious postmark-mcp release stayed up for about a week. Both outlast a three-day wait. |
+| Trade-off | Server and extension updates arrive a week late. These change far less often than libraries, so the cost is small. A malicious version that stays up longer than a week still passes. |
+| Change it when | Lower it only for servers and extensions you publish yourself |
+| Enforce it | No config in `enforcement/` covers it. The agent applies it. Turn off extension auto-update so the editor does not bypass it. |
 
 ### `min_package_age_days` (default 90)
 
@@ -185,7 +197,7 @@ Limits, by design:
 | Exception | How | Limit |
 |---|---|---|
 | Approved list (APR-1) | `.dependency-policy/approved.txt` in the project, one `ecosystem:name` or `ecosystem:name@version` per line. The agent reads it first and never edits it. | Does not bypass the version cooldown, malware advisories or the untrusted-content rule. |
-| Security-patch fast path (FIX-1) | A version that fixes a published advisory may bypass the cooldown. The agent records the advisory ID. | The advisory must come from a database the agent queried, not from package text. |
+| Security-fix fast path (FIX-1) | Checked before the cooldown. A version that fixes a high, critical or known-exploited advisory affecting the project is installed without waiting. The agent records the advisory ID. | The advisory must come from a database the agent queried and must name the version as fixed. The version must come from the usual publisher. Package text, changelogs and issues do not count. Where the package manager enforces the cooldown, lifting it for that one install needs approval (FIX-2). |
 | Override (OVR-1) | A human in the session can override any ASK. The agent records one line: rule ID, who, why. | BLOCK rules are not overridden in a session. An unattended agent cannot override. |
 
 Example `approved.txt`:

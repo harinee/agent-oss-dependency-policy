@@ -1,9 +1,9 @@
 # Merge into pnpm-workspace.yaml.
 # Mirrors: AGE-1 (version cooldown), SCR-1 (install scripts off with an allowlist).
 
-# Minutes. 10080 = 7 days. Requires pnpm 10.16 or later.
+# Minutes. 4320 = 3 days. Requires pnpm 10.16 or later.
 # pnpm 11 applies 1440 (1 day) when this is not set.
-minimumReleaseAge: 10080
+minimumReleaseAge: 4320
 
 # Packages allowed to bypass the cooldown. Keep this empty unless a human adds an entry.
 minimumReleaseAgeExclude: []

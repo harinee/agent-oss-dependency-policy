@@ -1,8 +1,8 @@
 # Merge into .yarnrc.yml (Yarn 4).
 # Mirrors: AGE-1 (version cooldown), SCR-1 (install scripts off).
 
-# Yarn 4.15 and later default to "1d". "1w" is one week.
-npmMinimalAgeGate: "1w"
+# Yarn 4.15 and later default to "1d". "3d" is three days.
+npmMinimalAgeGate: "3d"
 
 # Default is false since Yarn 4.14. Set explicitly so an older 4.x behaves the same.
 enableScripts: false

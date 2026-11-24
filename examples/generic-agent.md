@@ -21,7 +21,7 @@ The first three are the `baseline-general` preset; the npm overlay is added to i
 
 ## What the policy asks for
 
-**"Add express."** A mature package. The agent looks up the publish dates, installs the newest version older than 7 days with an exact version and scripts off, and reports one line. No question.
+**"Add express."** A mature package. The agent looks up the publish dates, installs the newest version older than 3 days with an exact version and scripts off, and reports one line. No question.
 
 **"Add this package I found."** It was first published last week and has no linked repository. AGE-3 applies: the agent states that in two lines and waits.
 
