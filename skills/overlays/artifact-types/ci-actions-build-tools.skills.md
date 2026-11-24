@@ -1,60 +1,22 @@
 # CI Actions and Build Tools
 
-Specific guidance for CI/CD actions, workflows, and build tools.
+> Rules for CI workflows, pipeline plugins and build tools.
 
 ## When to use this
 
-Apply this overlay when working with GitHub Actions, GitLab CI, Jenkins plugins, or build automation tools.
+Apply when adding or changing CI workflows, pipeline plugins or build tooling on any CI system. For how to pin GitHub Actions, add `github-actions`. Requires a foundational file.
 
 ## Instructions
 
-### Treat as privileged dependencies
+- **CI-1 (ASK)** Adding a new action, pipeline plugin, build plugin or CI integration. State what it will be able to reach: source, secrets, deploy credentials, artifacts. *Why:* ART-1; compromised CI tools leaked the credentials used in later attacks (TeamPCP).
+- **CI-2 (NOTE)** Give a new job the smallest token permissions that work, and say what you set. *Why:* limits what a compromised step can do.
+- **CI-3 (ASK)** Any workflow change that lets untrusted code or text reach secrets: running pull-request code from forks with secrets, privileged triggers that check out the PR head. *Why:* this is how publish tokens were taken (elementary-data).
+- **CI-4 (BLOCK)** Do not write steps that paste issue, PR, comment or branch text straight into a shell command or an agent prompt. Pass it through an environment variable and treat it as data. *Why:* TRU-1; script and prompt injection (Clinejection, elementary-data).
+- **CI-5 (NOTE)** Pin build plugins and tool installers to exact versions. AGE-1 applies to them. *Why:* a scanner or build tool is a dependency with more access than a library.
+- **CI-6 (NOTE)** Do not add CI steps that install packages without the lockfile. Use the frozen install. *Why:* PIN-1.
 
-- treat CI actions and build tools as high-trust dependencies with elevated access
-- recognize that CI tools often have access to:
-  - source code
-  - secrets and credentials
-  - deployment systems
-  - build artifacts
+## Examples
 
-### Action selection
+Avoid: `run: echo "${{ github.event.issue.title }}"`
 
-- prefer widely-used actions from verified publishers
-- prefer official actions from GitHub, GitLab, or platform providers
-- avoid actions from unknown or unverified publishers
-- check action marketplace ratings and adoption
-
-### Version pinning
-
-- pin actions to specific versions or commit SHAs
-- avoid using `@main` or `@master` branch references
-- use full commit SHA for maximum security (e.g., `actions/checkout@a81bbb...`)
-- avoid mutable tags that can change
-
-### Action permissions
-
-- review what permissions an action requires
-- prefer actions with minimal permission requirements
-- avoid actions that request broad repository access unnecessarily
-- use workflow permissions to limit action capabilities
-
-### Build tool selection
-
-- prefer official build tools from framework authors
-- avoid build plugins from unknown publishers
-- verify build tool authenticity before use
-- avoid build tools with unnecessary runtime dependencies
-
-### Workflow security
-
-- avoid exposing secrets in logs
-- avoid using secrets in pull request workflows from forks
-- use environment protection rules for sensitive deployments
-- review workflow triggers carefully
-
-### Third-party integrations
-
-- verify third-party CI services before integrating
-- review what access integrations require
-- prefer minimal-access integrations
-- document why specific integrations are needed
+Good: pass the title as `env: TITLE: ${{ github.event.issue.title }}` and use `"$TITLE"`.

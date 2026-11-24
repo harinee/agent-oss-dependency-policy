@@ -1,51 +1,27 @@
 # Prototype / Low Risk Context
 
-Relaxed guidance for prototypes, experiments, and low-risk projects.
+> Lower friction for prototypes and experiments. The BLOCK rules and install-script rules do not relax.
 
 ## When to use this
 
-Apply this overlay to prototype projects, proof-of-concepts, personal experiments, or low-risk development.
+Apply to proofs of concept, experiments and throwaway work. Use one context overlay at a time. Requires a foundational file.
+
+Prototypes run on developer machines with real credentials, which is what recent package malware steals. That is why this overlay relaxes reporting, not the rules about what runs.
+
+## Level shifts
+
+| Rule | Level here |
+|---|---|
+| DEP-1 | silent |
+| MNT-1 | silent |
+| LIC-1 | silent |
+
+## Tunable thresholds
+
+| Threshold | Value here | Rationale |
+|---|---|---|
+| `version_cooldown_days` | 1 | Matches the shortest package-manager defaults. Covers releases pulled within hours. |
 
 ## Instructions
 
-### Experimentation allowed
-
-- allow faster iteration and experimentation
-- permit trying new or less-established packages for evaluation
-- allow testing experimental features and frameworks
-- permit more flexible dependency exploration
-
-### Still maintain baselines
-
-- still avoid unnecessary dependencies
-- still prefer maintained packages when practical
-- still pin versions for reproducibility
-- still record dependencies in manifests
-
-### Version management
-
-- pin versions for reproducibility, even in prototypes
-- commit lockfiles to allow others to reproduce the prototype
-- document significant dependency choices for potential production migration
-
-### Risk awareness
-
-- acknowledge that prototype dependencies may not be production-ready
-- document any dependencies that would need review before production
-- avoid developing production patterns that rely on untested packages
-- plan for dependency re-evaluation if prototype becomes production code
-
-### Migration considerations
-
-If the prototype may become production code:
-- document dependency choices and rationale
-- flag any dependencies that need production review
-- prefer dependencies that could scale to production
-- avoid accumulating technical debt that blocks production use
-
-### Learning and evaluation
-
-- use prototypes to evaluate new packages and tools safely
-- document lessons learned about dependency choices
-- share findings about package quality and maintenance
-- treat prototypes as opportunities to test guardrails safely
+- **PROTO-1 (NOTE)** Keep a short list of dependencies that triggered AGE-2, AGE-3 or any ASK. Hand it over if the prototype moves toward production. *Why:* those decisions need a second look under stricter levels.

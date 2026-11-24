@@ -1,61 +1,22 @@
 # Container Images
 
-Specific guidance for selecting and using container images.
+> How to apply the foundational rules to base images and images in manifests.
 
 ## When to use this
 
-Apply this overlay when working with Docker images, Kubernetes manifests, or container-based deployments.
+Apply when writing Dockerfiles, Compose files, Kubernetes manifests or CI steps that pull images. Requires a foundational file.
 
 ## Instructions
 
-### Base image selection
+- **IMG-1 (NOTE)** Apply PIN-5: write `name:tag@sha256:<digest>`. Get the digest from the registry yourself (`docker pull` prints it). Keep the tag so readers can see the version. *Why:* the digest is the only immutable reference.
+- **IMG-2 (NOTE)** State the registry and publisher namespace of any new image. Apply ID-2 to image names. *Why:* lookalike namespaces exist on every registry.
+- **IMG-3 (NOTE)** Apply AGE-1 to tags where the registry shows when a tag was pushed. Otherwise report `AGE-1: not checked`. *Why:* a re-pushed tag is the image form of a hijacked release.
+- **IMG-4 (NOTE)** When updating, change tag and digest together and say what changed. Never update a digest without knowing which version it is. *Why:* keeps updates reviewable.
+- **IMG-5 (NOTE)** SRC-2 applies inside `RUN` instructions. A file downloaded in a Dockerfile must be checked against a checksum written in the Dockerfile. *Why:* a build that fetches unverified code is not pinned.
+- **IMG-6 (NOTE)** Packages installed inside the image follow the same rules as the project's own dependencies. *Why:* the image is part of the supply chain.
 
-- prefer official base images from Docker Hub or verified publishers
-- avoid `latest` tag - use specific version tags
-- prefer minimal base images (alpine, slim, distroless)
-- avoid unnecessarily large base images
-- verify image publishers before use
+## Examples
 
-### Image tags
+Good: `FROM python:3.12.7-slim@sha256:<digest>`
 
-- use specific version tags (node:18.16.0, python:3.11.4)
-- avoid mutable tags like `latest`, `stable`, or `main`
-- avoid using branch names as tags
-- pin image digests for maximum reproducibility (image@sha256:...)
-
-### Image sources
-
-- prefer Docker Hub official images
-- prefer verified publisher images
-- avoid images from unknown or unverified sources
-- use organization-approved registries when available
-- avoid pulling images from arbitrary registries
-
-### Dockerfile practices
-
-- minimize layers
-- avoid downloading and executing scripts in Dockerfile
-- avoid `curl | bash` patterns in RUN instructions
-- use multi-stage builds to reduce final image size
-- avoid storing secrets in images
-
-### Image updates
-
-- update base images intentionally, not automatically
-- review base image changes before updating
-- test image updates before deploying
-- document why specific base images are used
-
-### Security scanning
-
-- scan images for vulnerabilities before use
-- avoid images with critical vulnerabilities
-- prefer images with minimal packages
-- avoid images with unnecessary tools (shells, compilers) in production
-
-### Image provenance
-
-- prefer images with clear provenance information
-- verify image signatures when available
-- use content trust where supported
-- avoid images with unclear build processes
+Avoid: `FROM python:latest`, `FROM python:3.12`, `RUN curl -sSL https://example.com/install.sh | sh`

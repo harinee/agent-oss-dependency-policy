@@ -1,67 +1,23 @@
 # Java / Maven / Gradle Ecosystem
 
-Specific guidance for Java projects using Maven or Gradle.
+> How to apply the foundational rules with Maven and Gradle.
 
 ## When to use this
 
-Apply this overlay to Java projects.
+Apply to JVM projects. Requires a foundational file.
 
 ## Instructions
 
-### Package selection
+- **JVM-1 (NOTE)** Neither Maven nor Gradle has a built-in release-age setting that we could find. Apply AGE-1 yourself: look up the version's publish date in the repository's metadata before choosing it. *Why:* nothing enforces the cooldown for you here.
+- **JVM-2 (NOTE)** Use exact versions. No version ranges, no dynamic versions (`1.+`, `latest.release`). `SNAPSHOT` versions in a release build need an ASK. *Why:* PIN-1; these resolve to something different later.
+- **JVM-3 (NOTE)** If the project uses Gradle dependency locking or dependency verification, update those files in the same change. Do not disable them. *Why:* they are the project's lockfile and integrity data.
+- **JVM-4 (ASK)** Adding a repository that the build does not already use. *Why:* SRC-1; a second repository can serve a different artifact under the same coordinates.
+- **JVM-5 (ASK)** Adding a Maven or Gradle plugin. Pin its version. *Why:* ART-1; plugins run code inside the build.
+- **JVM-6 (NOTE)** Check the group ID belongs to the project you mean. *Why:* ID-2; lookalike group IDs are the JVM form of typosquatting.
+- **JVM-7 (NOTE)** Use the right scope (`test`, `provided`, `runtime`). *Why:* test tools should not ship to production.
 
-- prefer libraries from Maven Central
-- prefer well-established libraries with strong community support
-- avoid snapshot versions in production
-- check library maintenance status and update frequency
-- prefer libraries from reputable organizations
+## Examples
 
-### Version management
+Good: `implementation("com.fasterxml.jackson.core:jackson-databind:2.17.2")`
 
-- pin exact versions in pom.xml or build.gradle
-- avoid version ranges (e.g., [1.0,2.0)) in production
-- avoid SNAPSHOT versions in production dependencies
-- use dependency management sections to control transitive versions
-
-### Repository configuration
-
-- prefer Maven Central as primary repository
-- avoid adding custom repositories unless necessary
-- verify repository URLs before adding
-- avoid repositories without HTTPS
-- document why custom repositories are required
-
-### Dependency scope
-
-- use appropriate scopes (compile, test, provided, runtime)
-- avoid including test dependencies in production builds
-- keep test dependencies separate
-- minimize compile-time dependencies
-
-### Build files
-
-- maintain consistent formatting in pom.xml or build.gradle
-- avoid modifying parent POM configurations unnecessarily
-- respect existing dependency management patterns
-- update lockfiles (gradle.lockfile) when dependencies change
-
-### Transitive dependencies
-
-- be aware of transitive dependency chains
-- use dependency exclusions carefully and document why
-- avoid creating dependency conflicts
-- review transitive dependencies for vulnerabilities
-
-### Plugins and build tools
-
-- treat Maven plugins and Gradle plugins as dependencies
-- pin plugin versions exactly
-- prefer official plugins from Maven or Gradle
-- avoid plugins from unknown publishers
-
-### Security
-
-- avoid dependencies with known CVEs
-- respect Maven dependency:analyze and dependency:tree warnings
-- use dependency verification in Gradle when available
-- avoid dependencies that download additional code at runtime
+Avoid: `implementation("com.fasterxml.jackson.core:jackson-databind:2.+")`

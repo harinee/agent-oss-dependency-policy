@@ -1,59 +1,21 @@
 # Production Context
 
-Stricter guidance for production systems and customer-facing applications.
+> Stricter levels and change discipline for production systems.
 
 ## When to use this
 
-Apply this overlay to production systems, customer-facing applications, or business-critical services.
+Apply to production and customer-facing systems. Use one context overlay at a time. Requires a foundational file. On top of `oss-selection-strict` the level shifts below change nothing; on top of the baseline they raise three rules.
+
+## Level shifts
+
+| Rule | Level here |
+|---|---|
+| AGE-2 | ASK |
+| SRC-2 | BLOCK |
+| LIC-1 | ASK |
 
 ## Instructions
 
-### Stability priority
-
-- prefer stable, well-tested releases
-- avoid experimental or alpha/beta packages
-- prefer packages with established track records in production
-- avoid frequent dependency churn
-
-### Change management
-
-- treat dependency changes as significant events requiring review
-- test dependency updates thoroughly before production deployment
-- document dependency update rationale
-- prefer gradual rollout of dependency updates
-
-### Maintenance and support
-
-- prefer packages with active maintenance and security response
-- prefer packages with clear support channels
-- avoid packages that appear abandoned or unmaintained
-- verify that packages have security disclosure processes
-
-### Version management
-
-- pin exact versions with no flexibility
-- avoid version ranges
-- document version selection rationale
-- maintain dependency update changelog
-
-### Risk assessment
-
-Before adding production dependencies, assess:
-- package stability and production readiness
-- maintenance status and security response
-- breaking change history
-- community adoption in production environments
-
-### Monitoring and observability
-
-- monitor dependency health in production
-- track dependency-related errors and issues
-- maintain inventory of production dependencies
-- plan for dependency incident response
-
-### Rollback readiness
-
-- ensure dependency changes can be rolled back
-- test rollback procedures
-- maintain previous known-good dependency versions
-- document rollback process for dependency issues
+- **PROD-1 (ASK)** Pre-release versions: alpha, beta, release candidates, snapshots. *Why:* not intended for production by their own authors.
+- **PROD-2 (NOTE)** Make each dependency change revertible on its own: one change, one commit or PR. *Why:* rollback is the fastest response to a bad release.
+- **PROD-3 (NOTE)** For a major-version upgrade, link the changelog and name the breaking changes that affect this project. *Why:* reviewers need it to judge the change.

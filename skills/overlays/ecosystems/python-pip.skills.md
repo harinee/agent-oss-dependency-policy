@@ -1,58 +1,37 @@
 # Python / pip Ecosystem
 
-Specific guidance for Python projects using pip, poetry, or conda.
+> How to apply the foundational rules with pip, uv, Poetry and PDM.
 
 ## When to use this
 
-Apply this overlay to Python projects.
+Apply to Python projects. Requires a foundational file.
 
 ## Instructions
 
-### Package selection
+### Looking things up
 
-- prefer maintained libraries with active PyPI presence
-- avoid packages with setup.py scripts that download additional code
-- prefer pure Python packages when possible
-- check PyPI download statistics and maintenance status
-- avoid packages that are wrappers around unmaintained C libraries
+- **PY-1 (NOTE)** Use `https://pypi.org/pypi/<name>/json` for the foundational checks: each release file has an upload time (AGE-1, AGE-2) and the project links its repository (AGE-3). If you cannot find who uploaded a release, report `PUB-1: not checked`. *Why:* these are the facts the rules depend on.
 
-### Version management
+### Cooldown
 
-- pin exact versions in requirements.txt (package==1.2.3)
-- use requirements.txt or poetry.lock for reproducibility
-- avoid version ranges in production requirements
-- commit lockfiles (requirements.txt, poetry.lock, Pipfile.lock)
+- **PY-2 (NOTE)** If the project sets a release-age option (`--uploaded-prior-to` in pip, `exclude-newer` in uv, `solver.min-release-age` in Poetry, `--exclude-newer` in PDM), rely on it and report its value. Do not lower it or add exclusions; that needs an ASK. *Why:* config is enforced, instructions are not.
 
-### Requirements files
+### Installing
 
-- maintain separate requirements files if needed (requirements.txt, requirements-dev.txt)
-- ensure all dependencies are recorded in requirements files
-- avoid installing packages without adding them to requirements
-- update requirements files when dependencies change
+- **PY-3 (NOTE)** Pin exact versions (`name==1.2.3`). Use the project's lockfile (`uv.lock`, `poetry.lock`, `pdm.lock`) or a requirements file with `--hash` entries. A requirements file without hashes is a pin list, not a lockfile; say so if that is all the project has. *Why:* PIN-1.
+- **PY-4 (NOTE)** Install into the project's virtual environment. Installing into the system or user Python needs an ASK. *Why:* keeps the change visible and reversible.
 
-### Virtual environments
+### Code that runs at install or start-up
 
-- use virtual environments (venv, virtualenv, poetry env)
-- avoid installing packages globally
-- avoid modifying system Python installation
-- document virtual environment setup in project
+- **PY-5 (ASK)** A source distribution runs its build code when installed. Prefer wheels (`--only-binary :all:`). If only a source distribution exists, apply SCR-1. *Why:* building from source executes code from the package.
+- **PY-6 (NOTE)** A wheel can still run code at every interpreter start through a `.pth` file. After installing, report any new `.pth` file in site-packages that contains an `import` line. Wheels are not a safety check. *Why:* this is how the payload ran in LiteLLM and elementary-data.
 
-### Installation commands
+### After installing
 
-- use `pip install -r requirements.txt` for reproducible installs
-- use `pip install package==1.2.3` with exact versions
-- avoid `pip install --upgrade` without careful review
-- avoid installing from git URLs unless necessary
+- **PY-7 (NOTE)** If the project uses an audit tool such as `pip-audit`, run it and report new advisories. *Why:* known-bad versions are the cheapest thing to catch.
 
-### Security
+## Examples
 
-- avoid packages with known vulnerabilities
-- be cautious of packages with native extensions from unknown publishers
-- avoid packages that execute code during installation
-- respect pip audit or safety check warnings
+Good: `uv add 'requests==2.32.3'`, `pip install --only-binary :all: --require-hashes -r requirements.txt`
 
-### Build and distribution
-
-- avoid packages that require complex build dependencies unnecessarily
-- prefer wheels over source distributions for faster, safer installs
-- avoid packages with unclear build processes
+Avoid: `pip install requests`, `pip install --upgrade -r requirements.txt`, `pip install git+https://...`
