@@ -1,0 +1,117 @@
+{
+  "_comment": "Source of truth for packaged presets. Run `python3 scripts/build.py` after editing. Each preset is the exact concatenation of its sources.",
+  "presets": [
+    {
+      "name": "baseline-general",
+      "title": "Baseline General Purpose",
+      "summary": "General development with an agent that installs packages and runs shell commands. Start here if unsure.",
+      "sources": [
+        "skills/foundational/oss-selection-baseline.skills.md",
+        "skills/overlays/capabilities/agent-can-install-packages.skills.md",
+        "skills/overlays/capabilities/agent-can-run-shell.skills.md"
+      ]
+    },
+    {
+      "name": "prototype-quick",
+      "title": "Prototype",
+      "summary": "Prototypes and experiments. Shorter cooldown and less reporting; the BLOCK and install-script rules stay.",
+      "sources": [
+        "skills/foundational/oss-selection-baseline.skills.md",
+        "skills/overlays/capabilities/agent-can-install-packages.skills.md",
+        "skills/overlays/capabilities/agent-can-run-shell.skills.md",
+        "skills/overlays/contexts/prototype-low-risk.skills.md"
+      ]
+    },
+    {
+      "name": "npm-high-autonomy",
+      "title": "npm with an Unattended Agent",
+      "summary": "Node.js projects where the agent runs with no human in the session and may open pull requests and use MCP servers.",
+      "sources": [
+        "skills/foundational/oss-selection-baseline.skills.md",
+        "skills/overlays/capabilities/agent-can-install-packages.skills.md",
+        "skills/overlays/capabilities/agent-can-run-shell.skills.md",
+        "skills/overlays/capabilities/agent-can-use-tools-or-mcp.skills.md",
+        "skills/overlays/capabilities/agent-can-open-pr.skills.md",
+        "skills/overlays/capabilities/agent-runs-unattended.skills.md",
+        "skills/overlays/ecosystems/npm-node.skills.md",
+        "skills/overlays/artifact-types/mcp-servers-connectors.skills.md"
+      ]
+    },
+    {
+      "name": "python-sensitive-repo",
+      "title": "Python in a Regulated or Sensitive Environment",
+      "summary": "Python projects in regulated or sensitive environments. Strict levels, 14-day cooldown, decision record.",
+      "sources": [
+        "skills/foundational/oss-selection-strict.skills.md",
+        "skills/overlays/capabilities/agent-can-install-packages.skills.md",
+        "skills/overlays/ecosystems/python-pip.skills.md",
+        "skills/overlays/contexts/regulated-sensitive.skills.md"
+      ]
+    },
+    {
+      "name": "strict-agent-high-autonomy",
+      "title": "Strict Agent with Broad Capabilities",
+      "summary": "Production systems where the agent can install, run shell, use tools, open pull requests and change CI and container configuration.",
+      "sources": [
+        "skills/foundational/oss-selection-strict.skills.md",
+        "skills/overlays/capabilities/agent-can-install-packages.skills.md",
+        "skills/overlays/capabilities/agent-can-run-shell.skills.md",
+        "skills/overlays/capabilities/agent-can-use-tools-or-mcp.skills.md",
+        "skills/overlays/capabilities/agent-can-open-pr.skills.md",
+        "skills/overlays/contexts/production.skills.md",
+        "skills/overlays/artifact-types/ci-actions-build-tools.skills.md",
+        "skills/overlays/artifact-types/github-actions.skills.md",
+        "skills/overlays/artifact-types/scanners-security-tools.skills.md",
+        "skills/overlays/ecosystems/container-images.skills.md"
+      ]
+    },
+    {
+      "name": "java-production",
+      "title": "Java in Production",
+      "summary": "JVM services in production built with Maven or Gradle.",
+      "sources": [
+        "skills/foundational/oss-selection-strict.skills.md",
+        "skills/overlays/capabilities/agent-can-install-packages.skills.md",
+        "skills/overlays/capabilities/agent-can-open-pr.skills.md",
+        "skills/overlays/ecosystems/java-maven-gradle.skills.md",
+        "skills/overlays/contexts/production.skills.md"
+      ]
+    },
+    {
+      "name": "go-service",
+      "title": "Go Service",
+      "summary": "Go services with container images and GitHub Actions.",
+      "sources": [
+        "skills/foundational/oss-selection-baseline.skills.md",
+        "skills/overlays/capabilities/agent-can-install-packages.skills.md",
+        "skills/overlays/capabilities/agent-can-run-shell.skills.md",
+        "skills/overlays/ecosystems/go-modules.skills.md",
+        "skills/overlays/ecosystems/container-images.skills.md",
+        "skills/overlays/artifact-types/github-actions.skills.md"
+      ]
+    },
+    {
+      "name": "rust-project",
+      "title": "Rust Project",
+      "summary": "Rust projects built with Cargo.",
+      "sources": [
+        "skills/foundational/oss-selection-baseline.skills.md",
+        "skills/overlays/capabilities/agent-can-install-packages.skills.md",
+        "skills/overlays/capabilities/agent-can-run-shell.skills.md",
+        "skills/overlays/ecosystems/rust-cargo.skills.md"
+      ]
+    },
+    {
+      "name": "agent-tooling",
+      "title": "Agent Tooling",
+      "summary": "Any project where the agent may add MCP servers, editor extensions or third-party agent skills.",
+      "sources": [
+        "skills/foundational/oss-selection-baseline.skills.md",
+        "skills/overlays/capabilities/agent-can-use-tools-or-mcp.skills.md",
+        "skills/overlays/artifact-types/mcp-servers-connectors.skills.md",
+        "skills/overlays/artifact-types/ide-extensions.skills.md",
+        "skills/overlays/artifact-types/agent-skills.skills.md"
+      ]
+    }
+  ]
+}
