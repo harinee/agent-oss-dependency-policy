@@ -104,13 +104,13 @@ Incident names in the rationales refer to https://github.com/harinee/agent-oss-d
 
 ## Tunable thresholds
 
-Defaults are starting hypotheses, not measured values. Change the number here; mirror it in package-manager config where possible.
+Defaults are judgement calls, not measured values. Change the number here; mirror it in package-manager config where possible.
 
 | Threshold | Default | Rationale |
 |---|---|---|
 | `version_cooldown_days` | 7 | Hijacked package releases surveyed were removed within about 10 hours; some extensions stayed up for days. |
-| `min_package_age_days` | 90 | Carried over from earlier versions of this file. Unsourced. Only triggers a NOTE. |
-| `stale_after_months` | 24 | Chosen so that stable, finished libraries rarely trigger. Unsourced. |
+| `min_package_age_days` | 90 | A guess carried over from earlier versions of this file. No data behind it. Only triggers a NOTE. |
+| `stale_after_months` | 24 | A guess, long enough that stable, finished libraries rarely trigger. No data behind it. |
 
 ## Risk signals
 

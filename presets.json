@@ -102,6 +102,28 @@
       ]
     },
     {
+      "name": "dotnet-project",
+      "title": ".NET Project",
+      "summary": ".NET projects using NuGet.",
+      "sources": [
+        "skills/foundational/oss-selection-baseline.skills.md",
+        "skills/overlays/capabilities/agent-can-install-packages.skills.md",
+        "skills/overlays/capabilities/agent-can-run-shell.skills.md",
+        "skills/overlays/ecosystems/dotnet-nuget.skills.md"
+      ]
+    },
+    {
+      "name": "ruby-project",
+      "title": "Ruby Project",
+      "summary": "Ruby projects using Bundler.",
+      "sources": [
+        "skills/foundational/oss-selection-baseline.skills.md",
+        "skills/overlays/capabilities/agent-can-install-packages.skills.md",
+        "skills/overlays/capabilities/agent-can-run-shell.skills.md",
+        "skills/overlays/ecosystems/ruby-bundler.skills.md"
+      ]
+    },
+    {
       "name": "agent-tooling",
       "title": "Agent Tooling",
       "summary": "Any project where the agent may add MCP servers, editor extensions or third-party agent skills.",

@@ -14,6 +14,8 @@ Start with a preset. Build your own combination only if none fits.
 | `java-production` | strict | JVM services in production. |
 | `go-service` | baseline | Go services with containers and GitHub Actions. |
 | `rust-project` | baseline | Rust projects. |
+| `dotnet-project` | baseline | .NET projects using NuGet. |
+| `ruby-project` | baseline | Ruby projects using Bundler. |
 | `agent-tooling` | baseline | Projects where the agent may add MCP servers, editor extensions or agent skills. |
 
 Each preset file lists exactly what it includes at the top. The definitions are in [`presets.json`](../presets.json).
@@ -50,9 +52,11 @@ A combination is one foundational file plus any overlays.
 | Maven, Gradle | `skills/overlays/ecosystems/java-maven-gradle.skills.md` |
 | Go modules | `skills/overlays/ecosystems/go-modules.skills.md` |
 | Cargo | `skills/overlays/ecosystems/rust-cargo.skills.md` |
+| NuGet | `skills/overlays/ecosystems/dotnet-nuget.skills.md` |
+| Bundler, RubyGems | `skills/overlays/ecosystems/ruby-bundler.skills.md` |
 | Container images | `skills/overlays/ecosystems/container-images.skills.md` |
 
-There is no overlay yet for NuGet or RubyGems. The foundational rules still apply to them.
+Ecosystems without an overlay (for example PHP) still get the foundational rules, without ecosystem-specific commands.
 
 ### 4. Artifact types (any number)
 

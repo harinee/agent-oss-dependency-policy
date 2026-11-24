@@ -31,7 +31,7 @@ No example file is shipped for these. The setting names are from each tool's doc
 | pip | `--uploaded-prior-to P7D` (pip 26.1+) | Only effective with indexes that provide upload times. |
 | pip | `--only-binary :all:` and `--require-hashes` | Refuses source builds; requires a hash for every requirement. |
 | Poetry | `poetry config solver.min-release-age 7` (Poetry 2.4.0+) | Days. |
-| Bundler | `bundle config set cooldown 7` (Bundler 4.0.13+) | Days. |
+| Bundler | `bundle config set cooldown 7` (Bundler 4.0.13+) | Days. Versions served without a creation time are not filtered. |
 | NuGet | `minPublishAgeHours` on a package source (.NET SDK 11.0.100+) | Does not apply to ordinary package restore. |
 | Go | none | The toolchain has no release-age setting. The agent applies AGE-1 itself (see the Go overlay). |
 | Maven, Gradle | none found | Use the Dependabot or Renovate cooldown for update pull requests. |

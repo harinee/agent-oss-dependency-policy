@@ -38,8 +38,10 @@ Last reviewed 2026-11-24. This table checks the policy files in this repository 
 ## Gaps that apply to every row
 
 - A malicious version that survives longer than the cooldown is not caught by any rule here.
-- No overlay exists for NuGet or RubyGems. The foundational rules apply, without ecosystem-specific commands.
-- PUB-1 can be checked on npm and crates.io, which expose the publishing account per version. On PyPI the agent reports it as not checked.
+- PUB-1 can be checked on npm and crates.io, which expose the publishing account per version. On PyPI, NuGet and RubyGems the agent reports it as not checked.
+- All twelve incidents are assessed against npm, PyPI, Actions, images, MCP servers and extensions. None involved NuGet, RubyGems, Go or Cargo, so those overlays are untested against a real case.
+
+See [limitations.md](limitations.md) for the full list.
 
 ## Sources
 

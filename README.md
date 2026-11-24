@@ -16,7 +16,7 @@ Coding agents now choose and install dependencies with little or no supervision.
 
 ## Scope
 
-"OSS" here means anything an agent pulls from a public ecosystem: libraries (npm, PyPI, Maven, Go, Cargo), GitHub Actions, container images, MCP servers, editor extensions and third-party agent skills. It covers the agent's own decisions: what to select, install, pin, run, trust and read. It does not cover securing your own release pipeline, your secrets, or code you write.
+"OSS" here means anything an agent pulls from a public ecosystem: libraries (npm, PyPI, Maven, Go, Cargo, NuGet, RubyGems), GitHub Actions, container images, MCP servers, editor extensions and third-party agent skills. It covers the agent's own decisions: what to select, install, pin, run, trust and read. It does not cover securing your own release pipeline, your secrets, or code you write.
 
 ## Who this is for
 
@@ -51,7 +51,7 @@ To adjust thresholds, edit the "Tunable thresholds" table in your copy. The defa
 | `npm-high-autonomy` | Node.js with an unattended agent |
 | `python-sensitive-repo` | Python in regulated or sensitive settings |
 | `strict-agent-high-autonomy` | Production, with an agent that can change CI and containers |
-| `java-production`, `go-service`, `rust-project` | Those stacks |
+| `java-production`, `go-service`, `rust-project`, `dotnet-project`, `ruby-project` | Those stacks |
 | `agent-tooling` | Agents that add MCP servers, extensions or skills |
 
 ## Designed to avoid blocking you
@@ -132,8 +132,10 @@ Twelve incidents, with sources, scope and the remaining gap for each: [docs/thre
 - **Advisory.** Nothing here prevents an agent from doing anything.
 - **Not measured.** No agent has been run against these files in this repository. The [eval harness](evals/README.md) is included, with attack and false-positive scenarios; its results directory is empty.
 - **A patient attacker wins.** A malicious version that outlives the cooldown passes every rule.
-- **Thresholds are unvalidated.** The 7-day cooldown has a rationale; the 90-day and 24-month defaults have no source.
-- **Uneven depth.** npm and Python have the most specific guidance. NuGet and RubyGems have no overlay.
+- **Thresholds are judgement calls.** The 7-day cooldown is based on how quickly past malicious releases were removed. The 90-day and 24-month defaults are reasonable guesses with no data behind them.
+- **Uneven depth.** npm and Python have the most specific guidance.
+
+The full list is in [docs/limitations.md](docs/limitations.md). Read it before relying on this.
 
 | Part | Status |
 |---|---|
@@ -150,6 +152,7 @@ Twelve incidents, with sources, scope and the remaining gap for each: [docs/thre
 | [How to choose](docs/how-to-choose.md) | Presets and building your own |
 | [Friction model](docs/friction-model.md) | Levels, thresholds, escape hatches |
 | [Threat coverage](docs/threat-coverage.md) | Incidents, rules and gaps |
+| [Limitations](docs/limitations.md) | What this cannot do |
 | [Packaging](docs/packaging.md) | Sources, presets, Agent Skills |
 | [Enforcement](enforcement/README.md) | Config that backs the rules |
 | [Evals](evals/README.md) | Testing an agent with and without a policy |
@@ -158,6 +161,6 @@ Twelve incidents, with sources, scope and the remaining gap for each: [docs/thre
 
 ## Contributing and licence
 
-Contributions are welcome. The most useful are reports of rules that misfired, eval results from real agents, and overlays for Ruby, .NET and PHP. Start with [CONTRIBUTING.md](CONTRIBUTING.md). Run `make check` before opening a pull request.
+Contributions are welcome. The most useful are reports of rules that misfired, eval results from real agents, and overlays for ecosystems not yet covered. Start with [CONTRIBUTING.md](CONTRIBUTING.md). Run `make check` before opening a pull request.
 
 MIT. See [LICENSE](LICENSE).

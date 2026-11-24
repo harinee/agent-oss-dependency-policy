@@ -47,13 +47,15 @@ The BLOCK rules (ID-1, ID-3, TRU-1) and the install-script rule (SCR-1) are the 
 
 `scripts/selfcheck.py` checks the threshold rows of this table against the policy files.
 
-## The thresholds are hypotheses
+## The thresholds are judgement calls
+
+A threshold is a number someone had to pick. One of the three is anchored to evidence; the other two are not. "No data behind it" means nobody has shown that 90 days works better than 30 or 180. It is a starting point to adjust from your own experience.
 
 | Threshold | Default | Basis |
 |---|---|---|
 | `version_cooldown_days` | 7 | In the six hijacked package releases in [threat-coverage.md](threat-coverage.md) with a stated removal time, all were gone within about 10 hours. GlassWorm extensions stayed available for at least three days. Package-manager defaults are shorter: pnpm 11 and Yarn 4.15 use 1 day, Dependabot 3 days. Seven days is a margin, not a measurement. |
-| `min_package_age_days` | 90 | Carried over from earlier versions of this repository. No source. It only raises a NOTE at baseline. |
-| `stale_after_months` | 24 | Chosen so finished, stable libraries rarely trigger. No source. |
+| `min_package_age_days` | 90 | A guess, carried over from earlier versions of this repository. No data behind it. The cost of it being wrong is low: at baseline it only adds a one-line note. Under the strict foundation it triggers an ASK, so lower it there if it interrupts too often. |
+| `stale_after_months` | 24 | A guess, chosen to be long enough that finished, stable libraries rarely trigger it. No data behind it. It only adds a one-line note. |
 
 To change one, edit the "Tunable thresholds" table in your copy of the policy. If your package manager can enforce the value, set it there as well; see [`enforcement/`](../enforcement/README.md).
 
@@ -92,4 +94,4 @@ pypi:numpy@2.1.3
 
 ## What this cannot do
 
-These are instructions. An agent can ignore them, misread them, or be talked out of them. They cannot detect a malicious package that looks legitimate and is older than the cooldown. Whether an agent follows them at all has not been measured here; see [`evals/`](../evals/README.md).
+These are instructions. An agent can ignore them, misread them, or be talked out of them. See [limitations.md](limitations.md).

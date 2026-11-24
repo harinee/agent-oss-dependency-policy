@@ -22,6 +22,8 @@ Read the preset you are about to install. It is a set of instructions your agent
 | Java in production | `java-production` |
 | Go | `go-service` |
 | Rust | `rust-project` |
+| .NET | `dotnet-project` |
+| Ruby | `ruby-project` |
 | Any project where the agent may add MCP servers, extensions or skills | `agent-tooling` |
 
 More detail: [how-to-choose.md](how-to-choose.md).
