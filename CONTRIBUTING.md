@@ -4,7 +4,7 @@ Thanks for helping. This page is the short version; the [contribution guide](doc
 
 ## Setup
 
-You need Python 3.11 or later and `make`. There is nothing to install.
+You need Python 3 and `make`. There is nothing to install. The scripts use only the standard library and were tested with Python 3.13.
 
 ```bash
 git clone https://github.com/YOUR-USERNAME/agent-oss-dependency-policy.git
