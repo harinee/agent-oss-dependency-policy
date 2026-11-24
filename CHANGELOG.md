@@ -20,6 +20,7 @@ Notable changes to this project are recorded here.
 - `evals/`: scenario harness reporting catch rate and friction rate. No agent results are included.
 - `scripts/build.py`, `scripts/selfcheck.py` and a CI workflow.
 - `docs/threat-coverage.md`, `docs/friction-model.md`, `docs/packaging.md`.
+- `CONTRIBUTING.md`, `SECURITY.md`, a `Makefile`, and issue and pull request templates.
 
 ### Changed
 

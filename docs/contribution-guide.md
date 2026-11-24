@@ -4,6 +4,10 @@
 
 ---
 
+> Start with [CONTRIBUTING.md](../CONTRIBUTING.md) for setup, where things live and common tasks. This page covers the writing rules in more detail.
+
+---
+
 ## 🚀 Quick Start
 
 1. ⭐ Star the repository
