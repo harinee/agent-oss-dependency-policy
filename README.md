@@ -158,6 +158,7 @@ The full list is in [docs/limitations.md](docs/limitations.md). Read it before r
 | [Evals](evals/README.md) | Testing an agent with and without a policy |
 | [Relation to standards](docs/mapping-to-standards.md) | NIST SSDF, OWASP, CIS, SLSA |
 | [Why this exists](docs/why-this-exists.md), [Design principles](docs/design-principles.md) | Background |
+| [Writing guide](docs/contribution-guide.md) | How to write rules and overlays |
 
 ## Contributing and licence
 

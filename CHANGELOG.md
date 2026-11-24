@@ -13,13 +13,14 @@ Notable changes to this project are recorded here.
 - Fail-closed behaviour when no human can answer, and an `agent-runs-unattended` overlay.
 - Rules for install scripts, Actions by commit SHA, images by digest, provenance limits,
   lookalike names, publisher change, and content read by the agent as untrusted input.
-- Overlays: Go, Rust, GitHub Actions pinning, IDE extensions, third-party agent skills.
-- Presets: `prototype-quick`, `java-production`, `go-service`, `rust-project`, `agent-tooling`.
+- Overlays: Go, Rust, NuGet, RubyGems, GitHub Actions pinning, IDE extensions, third-party agent skills.
+- Presets: `prototype-quick`, `java-production`, `go-service`, `rust-project`, `dotnet-project`,
+  `ruby-project`, `agent-tooling`.
 - `agent-skills/`: each preset as an Agent Skills folder with `SKILL.md` front matter.
 - `enforcement/`: example package-manager, Dependabot and Renovate config, and a pin checker.
 - `evals/`: scenario harness reporting catch rate and friction rate. No agent results are included.
 - `scripts/build.py`, `scripts/selfcheck.py` and a CI workflow.
-- `docs/threat-coverage.md`, `docs/friction-model.md`, `docs/packaging.md`.
+- `docs/threat-coverage.md`, `docs/friction-model.md`, `docs/packaging.md`, `docs/limitations.md`.
 - `CONTRIBUTING.md`, `SECURITY.md`, a `Makefile`, and issue and pull request templates.
 
 ### Changed
@@ -30,6 +31,7 @@ Notable changes to this project are recorded here.
 - `npm-high-autonomy` now includes the unattended overlay.
 - `docs/mapping-to-standards.md` cut down to mappings checked against the source.
 - `examples/*.skills.md` renamed to `examples/*.md`; they are documents, not policy files.
+- Background docs rewritten in the same plain style as the README; emoji headings removed.
 - Install instructions now use `AGENTS.md` and locations checked against each agent's documentation.
 
 ### Removed
