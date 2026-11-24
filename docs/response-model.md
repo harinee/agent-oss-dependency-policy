@@ -20,7 +20,7 @@ Severity alone does not set the response. A high-severity signal with many innoc
 |---|---|---|
 | **BLOCK** | Stops, and says what it found, why it is a risk and the safe way forward | High severity **and** high confidence: there is no legitimate reason to proceed |
 | **ASK** | Says what it found, why it is a risk and the safe options, then waits | High severity, but the signal has legitimate explanations, or the action is privileged enough that a human should own it. The human has context the agent lacks. |
-| **NOTE** | Proceeds and reports in one line | The signal is weak on its own, **or** the agent can take the safe path without help and only needs to say so |
+| **NOTE** | Proceeds. Reports in one line only when the check changed what it did | The signal is weak on its own, **or** the agent can take the safe path without help and only needs to say so |
 
 ## Distribution of levels
 
@@ -29,13 +29,13 @@ Counts of levelled rules in each foundational file. `scripts/selfcheck.py` check
 | Level | Baseline | Strict |
 |---|---|---|
 | NOTE | 12 | 10 |
-| ASK | 8 | 9 |
+| ASK | 9 | 10 |
 | BLOCK | 3 | 4 |
 
 Two cautions when reading it:
 
 - **These are counts of rules, not of events.** How often each level fires in real work depends on the project and has not been measured (see [limitations.md](limitations.md)). The design intent is that adding a mature package at a version older than the cooldown triggers only NOTE rules.
-- **NOTE does not mean "no control".** Four of the twelve NOTE rules change what the agent does and report it afterwards: AGE-1 (pick a version old enough), PIN-1 (exact version and lockfile), PIN-4 (Actions by commit SHA), PIN-5 (images by digest). They are NOTE because the safe action needs no decision from a human. The other eight report a signal for the human to weigh.
+- **NOTE does not mean "no control".** Four of the twelve NOTE rules change what the agent does and report it afterwards: AGE-1 (pick a version old enough), PIN-1 (exact version and lockfile), PIN-4 (Actions by commit SHA), PIN-5 (images by digest). They are NOTE because the safe action needs no decision from a human. The other eight report a signal for the human to weigh, and say so only when they found something.
 
 Overlays add their own levelled rules. Each preset lists what it includes at the top.
 
@@ -82,7 +82,7 @@ The `not checked` line is the signal for a human or a scanner to cover the gap. 
 |---|---|---|
 | BLOCK | Stop, name the rule, offer an alternative | Same |
 | ASK | State the finding and wait | Fail closed: skip the dependency, log the rule ID and reason, continue with an alternative or stop that part of the task |
-| NOTE | One line with the check result | One line in the log or pull request |
+| NOTE | Silent when the check passes and changes nothing. One line when it changed the outcome. | One line in the commit or pull request |
 
 An unattended agent does not approve its own request, does not use the override (OVR-1) and does not edit the approved list, the overrides file or a script allowlist. The `agent-runs-unattended` overlay spells this out.
 

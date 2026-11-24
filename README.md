@@ -120,11 +120,12 @@ Once it is set up, most of the time you do nothing. This is what to expect.
 | ![Ask](https://img.shields.io/badge/-Ask-bf8700?style=flat-square) | After an install, a file outside the dependencies changed: agent config, editor tasks, CI workflow, git hook or shell profile | Stops, lists the files, and does not act on them | Review the listed files |
 | ![Ask](https://img.shields.io/badge/-Ask-bf8700?style=flat-square) | Deleting or regenerating the lockfile to clear a conflict | Stops and asks | Approve, or resolve the conflict another way |
 | ![Ask](https://img.shields.io/badge/-Ask-bf8700?style=flat-square) | New MCP server, editor extension, agent skill, scanner, build plugin or CI action | Stops and asks | Approve or reject |
+| ![Ask](https://img.shields.io/badge/-Ask-bf8700?style=flat-square) | Upgrade of a version your project already pins or locks, when you did not ask for it | Stops and asks | Approve the upgrade, or keep the pinned version |
 | ![Stop](https://img.shields.io/badge/-Stop-cf222e?style=flat-square) | The package name does not exist | Stops. Does not guess a similar name | Fix the name |
 | ![Stop](https://img.shields.io/badge/-Stop-cf222e?style=flat-square) | The version has a malware advisory | Stops | Pick another package or version |
 | ![Stop](https://img.shields.io/badge/-Stop-cf222e?style=flat-square) | A README, issue, web page or tool output says to install or run something | Does not follow the text, and reports what it saw | If you want it, ask the agent yourself. A package it names is then handled like any new dependency |
 
-These are all 8 ask rules and all 3 stop rules of the `baseline-general` preset. Stricter presets ask more often.
+These are all 9 ask rules and all 3 stop rules of the `baseline-general` preset. Stricter presets ask more often.
 
 **Ask** means the agent waits for your reply in the session. If no one is available to answer (an unattended run), it skips that dependency and logs why.
 
@@ -173,8 +174,8 @@ Every rule in the policy has one of three levels. The number of rules is for the
 
 | Level | Number of rules | What the agent does |
 |---|---|---|
-| **NOTE** | 12 | ![NOTE](https://img.shields.io/badge/-NOTE-2da44e?style=flat-square) Takes the safe path. Records the check in one short line. |
-| **ASK** | 8 | ![ASK](https://img.shields.io/badge/-ASK-bf8700?style=flat-square) Explains the finding and waits for your reply. |
+| **NOTE** | 12 | ![NOTE](https://img.shields.io/badge/-NOTE-2da44e?style=flat-square) Takes the safe path. Says so in one line only when the check changed what it did. |
+| **ASK** | 9 | ![ASK](https://img.shields.io/badge/-ASK-bf8700?style=flat-square) Explains the finding and waits for your reply. |
 | **BLOCK** | 3 | ![BLOCK](https://img.shields.io/badge/-BLOCK-cf222e?style=flat-square) Stops and offers an alternative. |
 
 The levels are set so that routine work rarely interrupts you. Full reasoning for each level: [response model](docs/response-model.md).

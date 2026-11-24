@@ -14,6 +14,8 @@ Notable changes to this project are recorded here.
   known-exploited advisory installs without waiting when the advisory database names the version as
   fixed and the publisher is unchanged. Claims in package text do not count.
 - Every ASK and BLOCK message states what was found, why it is a risk and the safe options.
+- NOTE checks are silent when they pass and change nothing; they report in one line only when they changed the outcome.
+- PIN-6, ASK: changing a version the project already pins or locks needs approval unless the task asks for it.
 - README rewritten around numbered setup steps and a day-to-day table. The incident tables moved to
   `docs/why-this-exists.md`; the companion-controls and status tables moved to `docs/limitations.md`.
 
