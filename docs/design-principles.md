@@ -1,12 +1,12 @@
 # 🧭 Design Principles
 
-> The 15 core principles guiding safe, practical agent guardrails
+> The 15 core principles behind the policy files
 
 ---
 
 ## Our Philosophy
 
-Every guardrail balances **security with practicality**. These principles adapt to your project's needs—they're guidelines, not absolutes.
+Every rule balances **security with practicality** and has to justify the friction it adds. The principles below are the reasoning; the rules, with IDs and response levels, are in `skills/foundational/`. See [friction-model.md](friction-model.md) for how levels are assigned.
 
 ---
 
@@ -29,13 +29,13 @@ Every guardrail balances **security with practicality**. These principles adapt 
 
 **Why:** Active maintenance signals ongoing security care and faster patches.
 
-**Signals:** Recent commits (last 3-6 months), responsive maintainers, active issue triage, security disclosure process.
+**Signals:** Releases within the staleness threshold (24 months by default), security fixes shipped when needed. A quiet, finished library is not a problem by itself; star counts and download counts are not evidence of safety.
 
 ---
 
 ### 3. 🏢 Prefer Official Sources
 
-**Why:** Official registries have vetting processes that reduce malicious code risk.
+**Why:** The default registry is where takedowns, advisories and lockfile integrity data apply. Registries do not vet packages before publication, so this principle reduces risk without removing it.
 
 **In practice:** Use npm, PyPI, Maven Central; prefer official libraries from framework authors; avoid unofficial mirrors.
 
@@ -49,7 +49,9 @@ Every guardrail balances **security with practicality**. These principles adapt 
 
 **Examples:**
 - ❌ `express: "*"` or `FROM node:latest`
-- ✅ `express: "4.18.2"` or `FROM node:18.17.0`
+- ✅ `express: "4.18.2"` with a committed lockfile, or `FROM node:22.11.0@sha256:<digest>`
+
+A pin protects against later changes. It does not help if the version pinned was malicious on the day it was chosen, which is what the version cooldown (AGE-1) is for.
 
 ---
 
@@ -66,7 +68,7 @@ Every guardrail balances **security with practicality**. These principles adapt 
 **Why:** Hidden dependencies bypass auditing, scanning, and SBOM generation.
 
 **Patterns to avoid:**
-- Install scripts that fetch code
+- Install scripts (whether or not they fetch more code)
 - Runtime downloads
 - Git URLs or direct URLs in dependencies
 
@@ -84,7 +86,7 @@ Every guardrail balances **security with practicality**. These principles adapt 
 
 **Why:** Unknown publishers may be malicious or lack security expertise.
 
-**Check:** Publisher reputation, maintainer identity, package adoption, community feedback.
+**Check:** That the package exists and is the one intended, that it links to a source repository, and whether the publishing account changed between versions. "Verified" badges and provenance show who published something, not whether it is safe.
 
 ---
 
@@ -193,8 +195,6 @@ The overlay system lets you adapt while maintaining clear baselines.
 ---
 
 <div align="center">
-
-**These principles create a foundation for safer AI-assisted development** 🛡️
 
 [⬆ Back to Main README](../README.md)
 

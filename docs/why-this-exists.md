@@ -16,7 +16,7 @@ Traditional OSS governance assumes humans make careful, deliberate decisions. **
 
 | Capability | Risk |
 |------------|------|
-| 📦 **Introduce dependencies rapidly** | 15 packages in seconds vs 30 minutes of human review |
+| 📦 **Introduce dependencies rapidly** | Many packages can be added in one step, faster than a person reviews them |
 | 📝 **Modify lockfiles/manifests** | Changes bypass typical scrutiny |
 | 🌳 **Add transitive dependencies** | Brings dozens of sub-dependencies invisibly |
 | 🔧 **Install tools dynamically** | CLI tools, MCP servers without vetting |
@@ -32,17 +32,19 @@ Traditional OSS governance assumes humans make careful, deliberate decisions. **
 ### 1. 🎭 Malicious Packages
 
 **Real incidents:**
-- [event-stream](https://snyk.io/blog/a-post-mortem-of-the-malicious-event-stream-backdoor/) (2018): 8M downloads affected
+- [event-stream](https://snyk.io/blog/a-post-mortem-of-the-malicious-event-stream-backdoor/) (2018): the malicious dependency was downloaded nearly 8 million times; the payload targeted one wallet application
 - [ua-parser-js](https://github.com/advisories/GHSA-pjwm-rvh2-c87w) (2021): Cryptominer injected
 - [colors.js/faker.js](https://www.bleepingcomputer.com/news/security/dev-corrupts-npm-libs-colors-and-faker-breaking-thousands-of-apps/) (2022): Intentional sabotage
 
 **Agent risk:** May not detect typosquatting or compromised packages.
 
+For incidents from 2025 and 2026, including ones that targeted AI coding agents directly, see [threat-coverage.md](threat-coverage.md).
+
 ---
 
 ### 2. 🔓 Weak Version Pinning
 
-**Risk:** Unpinned versions allow malicious updates to auto-install.
+**Risk:** Unpinned versions allow malicious updates to auto-install. Pinning alone is not enough: an agent that picks the newest version on the day it is published pins the malicious one. That is why the policy adds a version cooldown.
 
 **Example:**
 ```json
@@ -59,7 +61,7 @@ Traditional OSS governance assumes humans make careful, deliberate decisions. **
 
 **Real incidents:**
 - [CodeCov breach](https://about.codecov.io/security-update/) (2021): Bash uploader compromised
-- [SolarWinds](https://www.cisa.gov/news-events/news/joint-statement-federal-bureau-investigation-fbi-and-cybersecurity-and-infrastructure-security) (2020): Build system compromised
+- [SolarWinds](https://www.cisa.gov/news-events/news/joint-statement-federal-bureau-investigation-fbi-cybersecurity-and-0) (2020): Build system compromised
 
 **Agent risk:** CI actions, scanners, and MCP servers often have elevated permissions.
 
@@ -95,7 +97,7 @@ Traditional OSS governance doesn't work well for agents:
 
 | Traditional | Why It Fails for Agents |
 |------------|-------------------------|
-| 📄 Written for humans | Agents need machine-readable instructions |
+| 📄 Written for humans | Agents need short, specific instructions in their context |
 | 🏢 Policy documents | Agents can't follow 50-page PDFs |
 | 🔀 One-size-fits-all | Doesn't adapt to agent capabilities |
 | 🌍 Generic guidance | Not ecosystem-specific |
@@ -109,7 +111,7 @@ Traditional OSS governance doesn't work well for agents:
 
 ---
 
-## 🎯 What These Guardrails Do
+## 🎯 What These Files Do
 
 ### ✅ Encourage safer patterns:
 - Minimal dependencies
@@ -120,13 +122,13 @@ Traditional OSS governance doesn't work well for agents:
 - Review for privileged tools
 
 ### ✅ Adapt to context:
-- Prototype: reasonable safety + speed
-- Production: strict controls
-- Regulated: maximum scrutiny
+- Prototype: shorter cooldown, less reporting
+- Production: stricter levels
+- Regulated: strictest levels, longer cooldown, decision record
 
 ### ✅ Support different ecosystems:
-- npm, pip, Maven, containers
-- Each has unique risks
+- npm, Python, JVM, Go, Rust, containers
+- Each has its own mechanics
 
 ---
 
@@ -144,7 +146,7 @@ Traditional OSS governance doesn't work well for agents:
 ## 🛡️ Defense in Depth
 
 ```
-1️⃣  AGENT GUARDRAILS → Prevent bad dependencies from entering
+1️⃣  AGENT POLICY → Steer the agent away from risky choices
                 ↓
 2️⃣  SCA / SBOM TOOLS → Scan what did get added
                 ↓
@@ -153,7 +155,7 @@ Traditional OSS governance doesn't work well for agents:
 4️⃣  VULNERABILITY MGMT → Monitor and respond
 ```
 
-Each layer strengthens the others. Guardrails make SCA more effective by reducing noise.
+Each layer covers what the others miss. The policy is the weakest of the four, because an agent can ignore it; it is also the only one that acts before the dependency is chosen.
 
 ---
 
@@ -161,9 +163,9 @@ Each layer strengthens the others. Guardrails make SCA more effective by reducin
 
 AI agents are inevitable and beneficial. **We need to adapt our security practices** to this new reality.
 
-These guardrails are a step toward **safer AI-assisted development**—practical instructions that help agents make better dependency decisions.
+These files are a step toward **safer AI-assisted development**: practical instructions that help agents make better dependency decisions. They are advice to the agent, not a security control.
 
-[👉 Learn how to choose guardrails](how-to-choose.md)
+[👉 Learn how to choose a preset](how-to-choose.md)
 
 ---
 

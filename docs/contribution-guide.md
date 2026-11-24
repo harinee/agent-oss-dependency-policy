@@ -23,7 +23,7 @@
 | 💡 Share real-world experiences | High - Validates/improves guidance |
 | 🆕 Add ecosystem overlays | High - Expands coverage |
 | 🔧 Create new overlay types | Very High - New capabilities |
-| 📊 Add examples/case studies | High - Helps users apply guardrails |
+| 📊 Add examples/case studies | High - Helps users apply the policy |
 | 🧪 Test with different agents | High - Validates effectiveness |
 
 ---
@@ -38,11 +38,9 @@
 - Addressing specific risk scenarios from real experience
 
 **Examples needed:**
-- 🦀 Rust / Cargo
 - 💎 Ruby / Bundler
-- 🔷 Go / Go modules
 - 🌐 .NET / NuGet
-- 🗄️ Database tools/ORMs
+- 🐘 PHP / Composer
 
 ---
 
@@ -99,30 +97,34 @@
 ### Content Structure
 
 ```markdown
-# {File Name}
+# {Title}
 
-> {Brief one-line description}
+> {One-line description}
 
 ## When to use this
 
-{1-2 sentences}
+{1-2 sentences. Overlays end with "Requires a foundational file."}
 
 ## Instructions
 
-### {Category}
-- instruction one
-- instruction two
-
-## Risk signals
-
-- signal one → action
-- signal two → action
+- **{PREFIX}-1 (NOTE)** {What to do}. *Why:* {one line}.
+- **{PREFIX}-2 (ASK)** {Condition that needs approval}. *Why:* {one line}.
 
 ## Examples
 
-### ✅ Good patterns
-### ❌ Patterns to avoid
+Good: `{command or snippet}`
+
+Avoid: `{command or snippet}`
 ```
+
+Rules for rules:
+
+- Every rule has an ID with a prefix unique to the file, one level (`BLOCK`, `ASK` or `NOTE`) and a one-line `*Why:*`.
+- Default to `NOTE`. Use `ASK` only when the event is rare and the risk is high. Use `BLOCK` only when there is no legitimate reason to proceed. Say in the pull request why the friction is justified.
+- Do not restate a foundational rule. Refer to it by ID ("apply AGE-1").
+- Put numbers in a "Tunable thresholds" table, never in rule text, and say whether the default has a source.
+- Context overlays use a "Level shifts" table.
+- Name only tools and settings you have checked exist, and say where you checked.
 
 ---
 
@@ -138,6 +140,7 @@
 - Vague guidance: "use secure dependencies"
 - Absolute without reason: "never use version ranges"
 - Vendor-specific: "use Snyk to scan"
+- Unsourced facts: incidents, statistics or standards mappings without a dated source
 
 ---
 
@@ -158,6 +161,7 @@
 
 ### Before Submitting
 
+0. **Run the checks:** `python3 scripts/build.py && python3 scripts/selfcheck.py`. If you added an overlay, add it to a preset in `presets.json` or to `docs/how-to-choose.md` so it is reachable.
 1. **Test with a real agent** (Cline, Cursor, Copilot, Aider)
 2. **Observe:** Does the agent follow guidance? Clear instructions? Prevents risky patterns?
 3. **Check conflicts:** Contradictions with existing files? Duplication?
@@ -218,6 +222,8 @@ git commit -m "fix: clarify version pinning in npm overlay"
 - [ ] Appropriate language/style
 - [ ] Tested with AI agent
 - [ ] No conflicts
+- [ ] `scripts/selfcheck.py` passes
+- [ ] Every factual claim has a dated source
 - [ ] Docs updated if needed
 ```
 
@@ -226,7 +232,8 @@ git commit -m "fix: clarify version pinning in npm overlay"
 ## 🎯 What We're Looking For
 
 **High-value contributions:**
-1. Ecosystem overlays (Rust, Go, Ruby, .NET, PHP)
+1. Ecosystem overlays (Ruby, .NET, PHP)
+1. Eval results from real agents (see `evals/README.md`)
 2. Real-world validation and case studies
 3. Agent-specific insights and phrasing improvements
 4. Regional/regulatory guidance (GDPR, industry-specific)
@@ -250,26 +257,13 @@ git commit -m "fix: clarify version pinning in npm overlay"
 5. Proper formatting
 6. Evidence of testing
 
-**Timeline:**
-- Simple fixes: 1-3 days
-- New overlays: 1-2 weeks
-- Significant changes: 2-4 weeks
-
 ---
 
 ## 💬 Getting Help
 
-- 💡 General questions → [Discussions](https://github.com/harinee/agent-oss-dependency-policy/discussions)
+- 💡 General questions → [Issues](https://github.com/harinee/agent-oss-dependency-policy/issues)
 - 🐛 Bugs → [Issues](https://github.com/harinee/agent-oss-dependency-policy/issues)
 - 🤔 Unsure about contribution → Open Issue first
-
----
-
-## 🌟 Recognition
-
-Contributors are listed in contributors list, credited in release notes, and help the entire community!
-
-Significant contributors may be invited as maintainers.
 
 ---
 
