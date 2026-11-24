@@ -170,8 +170,8 @@
 ### 1. Fork and Branch
 
 ```bash
-git clone https://github.com/YOUR-USERNAME/agent-oss-guardrails.git
-cd agent-oss-guardrails
+git clone https://github.com/YOUR-USERNAME/agent-oss-dependency-policy.git
+cd agent-oss-dependency-policy
 git checkout -b add-rust-ecosystem-overlay
 ```
 
@@ -259,8 +259,8 @@ git commit -m "fix: clarify version pinning in npm overlay"
 
 ## 💬 Getting Help
 
-- 💡 General questions → [Discussions](https://github.com/harinee/agent-oss-guardrails/discussions)
-- 🐛 Bugs → [Issues](https://github.com/harinee/agent-oss-guardrails/issues)
+- 💡 General questions → [Discussions](https://github.com/harinee/agent-oss-dependency-policy/discussions)
+- 🐛 Bugs → [Issues](https://github.com/harinee/agent-oss-dependency-policy/issues)
 - 🤔 Unsure about contribution → Open Issue first
 
 ---

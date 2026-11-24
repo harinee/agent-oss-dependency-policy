@@ -1,4 +1,4 @@
-# 🛡️ Agent OSS Guardrails
+# 🛡️ Agent OSS Dependency Policy
 
 > **Safe, composable instructions for AI agents managing open source dependencies**
 
@@ -14,16 +14,16 @@ Choose based on your project type:
 
 ```bash
 # ✨ Most common - General projects
-cp packaged/baseline-general.skills.md .clinerules/oss-guardrails.md
+cp packaged/baseline-general.skills.md .clinerules/oss-dependency-policy.md
 
 # 🐍 Python production projects
-cp packaged/python-sensitive-repo.skills.md .clinerules/oss-guardrails.md
+cp packaged/python-sensitive-repo.skills.md .clinerules/oss-dependency-policy.md
 
 # 🟢 Node.js with autonomous agent
-cp packaged/npm-high-autonomy.skills.md .clinerules/oss-guardrails.md
+cp packaged/npm-high-autonomy.skills.md .clinerules/oss-dependency-policy.md
 
 # 🔒 High-autonomy agent needing strict controls
-cp packaged/strict-agent-high-autonomy.skills.md .clinerules/oss-guardrails.md
+cp packaged/strict-agent-high-autonomy.skills.md .clinerules/oss-dependency-policy.md
 ```
 
 ### **Step 2: That's it!** ✅
@@ -91,7 +91,7 @@ Want to customize? Build your own by combining files:
 cat skills/foundational/oss-selection-baseline.skills.md \
     skills/overlays/capabilities/agent-can-install-packages.skills.md \
     skills/overlays/ecosystems/npm-node.skills.md \
-    > .clinerules/oss-guardrails.md
+    > .clinerules/oss-dependency-policy.md
 ```
 
 **📖 Need help deciding?** See the [detailed selection guide](docs/how-to-choose.md)
@@ -137,7 +137,7 @@ docs/                      # Detailed guides
 
 ### For Cline/Roo (Recommended location)
 ```bash
-cp packaged/baseline-general.skills.md .clinerules/oss-guardrails.md
+cp packaged/baseline-general.skills.md .clinerules/oss-dependency-policy.md
 ```
 
 ### For Cursor
@@ -161,7 +161,7 @@ read: packaged/baseline-general.skills.md
 ```bash
 # Cline - applies to all projects
 mkdir -p ~/Documents/Cline/Rules/
-cp packaged/baseline-general.skills.md ~/Documents/Cline/Rules/oss-guardrails.md
+cp packaged/baseline-general.skills.md ~/Documents/Cline/Rules/oss-dependency-policy.md
 ```
 
 ---
@@ -203,6 +203,6 @@ MIT License - see [LICENSE](LICENSE)
 
 Built with lessons from [SLSA](https://slsa.dev/), [OWASP](https://owasp.org/), [NIST SSDF](https://csrc.nist.gov/Projects/ssdf)
 
-[⬆ Back to Top](#-agent-oss-guardrails)
+[⬆ Back to Top](#-agent-oss-dependency-policy)
 
 </div>

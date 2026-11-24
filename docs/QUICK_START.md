@@ -9,7 +9,7 @@
 **Just copy this command:**
 
 ```bash
-cp packaged/baseline-general.skills.md .clinerules/oss-guardrails.md
+cp packaged/baseline-general.skills.md .clinerules/oss-dependency-policy.md
 ```
 
 **Done!** Your AI agent now has safer dependency guidelines. ✅
@@ -24,10 +24,10 @@ Ask yourself: **What type of project is this?**
 
 | Your Answer | Command to Run |
 |------------|----------------|
-| 🤷 Not sure / General project | `cp packaged/baseline-general.skills.md .clinerules/oss-guardrails.md` |
-| 🐍 Python production system | `cp packaged/python-sensitive-repo.skills.md .clinerules/oss-guardrails.md` |
-| 🟢 Node.js with autonomous agent | `cp packaged/npm-high-autonomy.skills.md .clinerules/oss-guardrails.md` |
-| 🔒 Agent with lots of permissions | `cp packaged/strict-agent-high-autonomy.skills.md .clinerules/oss-guardrails.md` |
+| 🤷 Not sure / General project | `cp packaged/baseline-general.skills.md .clinerules/oss-dependency-policy.md` |
+| 🐍 Python production system | `cp packaged/python-sensitive-repo.skills.md .clinerules/oss-dependency-policy.md` |
+| 🟢 Node.js with autonomous agent | `cp packaged/npm-high-autonomy.skills.md .clinerules/oss-dependency-policy.md` |
+| 🔒 Agent with lots of permissions | `cp packaged/strict-agent-high-autonomy.skills.md .clinerules/oss-dependency-policy.md` |
 
 ### Step 2: Run the Command (10 seconds)
 
@@ -41,7 +41,7 @@ Check that the file was created:
 ls -la .clinerules/
 ```
 
-You should see `oss-guardrails.md` in the list.
+You should see `oss-dependency-policy.md` in the list.
 
 ### Step 4: Test It (optional)
 
@@ -80,7 +80,7 @@ read: packaged/baseline-general.skills.md
 **Example:** Started with general, now going to production?
 ```bash
 # Just copy the new one
-cp packaged/python-sensitive-repo.skills.md .clinerules/oss-guardrails.md
+cp packaged/python-sensitive-repo.skills.md .clinerules/oss-dependency-policy.md
 ```
 
 ---
@@ -123,7 +123,7 @@ pwd
 
 # Create the directory manually if needed
 mkdir -p .clinerules
-cp packaged/baseline-general.skills.md .clinerules/oss-guardrails.md
+cp packaged/baseline-general.skills.md .clinerules/oss-dependency-policy.md
 ```
 
 **Problem: Wrong AI agent**

@@ -8,12 +8,12 @@
 
 **Most projects (95% of cases):**
 ```bash
-cp packaged/baseline-general.skills.md .clinerules/oss-guardrails.md
+cp packaged/baseline-general.skills.md .clinerules/oss-dependency-policy.md
 ```
 
 **Production Python:**
 ```bash
-cp packaged/python-sensitive-repo.skills.md .clinerules/oss-guardrails.md
+cp packaged/python-sensitive-repo.skills.md .clinerules/oss-dependency-policy.md
 ```
 
 **Still not sure?** → Use `baseline-general` and adjust later if needed.
@@ -138,7 +138,7 @@ Choose **one** based on risk profile:
 cat skills/foundational/oss-selection-baseline.skills.md \
     skills/overlays/capabilities/agent-can-install-packages.skills.md \
     skills/overlays/ecosystems/npm-node.skills.md \
-    > .clinerules/oss-guardrails.md
+    > .clinerules/oss-dependency-policy.md
 ```
 
 ---
@@ -155,10 +155,10 @@ cat skills/foundational/oss-selection-strict.skills.md \
     skills/overlays/ecosystems/container-images.skills.md \
     skills/overlays/artifact-types/ci-actions-build-tools.skills.md \
     skills/overlays/contexts/production.skills.md \
-    > .clinerules/oss-guardrails.md
+    > .clinerules/oss-dependency-policy.md
 
 # Or use pre-packaged
-cp packaged/python-sensitive-repo.skills.md .clinerules/oss-guardrails.md
+cp packaged/python-sensitive-repo.skills.md .clinerules/oss-dependency-policy.md
 ```
 
 ---
@@ -174,10 +174,10 @@ cat skills/foundational/oss-selection-strict.skills.md \
     skills/overlays/capabilities/agent-can-use-tools-or-mcp.skills.md \
     skills/overlays/ecosystems/npm-node.skills.md \
     skills/overlays/artifact-types/mcp-servers-connectors.skills.md \
-    > .clinerules/oss-guardrails.md
+    > .clinerules/oss-dependency-policy.md
 
 # Or use pre-packaged
-cp packaged/strict-agent-high-autonomy.skills.md .clinerules/oss-guardrails.md
+cp packaged/strict-agent-high-autonomy.skills.md .clinerules/oss-dependency-policy.md
 ```
 
 ---
@@ -192,7 +192,7 @@ cat skills/foundational/oss-selection-strict.skills.md \
     skills/overlays/ecosystems/java-maven-gradle.skills.md \
     skills/overlays/artifact-types/scanners-security-tools.skills.md \
     skills/overlays/contexts/regulated-sensitive.skills.md \
-    > .clinerules/oss-guardrails.md
+    > .clinerules/oss-dependency-policy.md
 ```
 
 ---
@@ -208,7 +208,7 @@ cat skills/foundational/oss-selection-strict.skills.md \
 
 **Usage:**
 ```bash
-cp packaged/[package-name].skills.md .clinerules/oss-guardrails.md
+cp packaged/[package-name].skills.md .clinerules/oss-dependency-policy.md
 ```
 
 ---
@@ -218,7 +218,7 @@ cp packaged/[package-name].skills.md .clinerules/oss-guardrails.md
 ### Project-Level (Recommended)
 
 ```bash
-.clinerules/oss-guardrails.md           # Cline/Roo
+.clinerules/oss-dependency-policy.md           # Cline/Roo
 .cursorrules                            # Cursor
 .aider.conf.yml                         # Aider
 .github/copilot-instructions.md         # GitHub Copilot
@@ -227,8 +227,8 @@ cp packaged/[package-name].skills.md .clinerules/oss-guardrails.md
 ### Global (All Projects)
 
 ```bash
-~/Documents/Cline/Rules/oss-guardrails.md    # Cline
-~/.cursor/rules/oss-guardrails.md            # Cursor
+~/Documents/Cline/Rules/oss-dependency-policy.md    # Cline
+~/.cursor/rules/oss-dependency-policy.md            # Cursor
 ```
 
 ---

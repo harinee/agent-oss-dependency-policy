@@ -1,6 +1,6 @@
 # 📊 Mapping to Standards
 
-> How Agent OSS Guardrails align with established security frameworks
+> How the Agent OSS Dependency Policy files align with established security frameworks
 
 ---
 
