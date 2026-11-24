@@ -66,7 +66,7 @@ pypi:requests
 
 ## 5. Back it with config (recommended)
 
-The preset is advice to the agent. Your package manager can enforce the cooldown and block install scripts regardless of what the agent does. Copy the matching example from [`enforcement/`](../enforcement/README.md).
+The preset is advice to the agent. Your package manager can enforce the cooldown and block install scripts regardless of what the agent does. Merge the matching example from [`enforcement/`](../enforcement/README.md) into your existing config; do not overwrite a file that holds registry credentials.
 
 ## 6. Try it
 

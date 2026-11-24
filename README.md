@@ -2,7 +2,7 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-Instruction files that tell AI coding agents how to choose, pin and install open-source dependencies, so they stop pulling in unchecked packages without stopping your work.
+Instruction files that tell AI coding agents how to choose, pin and install open-source dependencies. The aim is to stop agents pulling in unchecked packages without interrupting ordinary work.
 
 **These are instructions, not enforcement.** An agent can ignore them, and they cannot detect a malicious package that looks legitimate. Use them with the tools listed under [What this does not cover](#what-this-does-not-cover).
 
@@ -10,8 +10,8 @@ Instruction files that tell AI coding agents how to choose, pin and install open
 
 Coding agents now choose and install dependencies with little or no supervision.
 
-- **They install names from memory.** In a study of 16 code-generating models, at least 5.2% of packages suggested by commercial models and 21.7% by open-source models did not exist ([USENIX Security, 2025](https://www.usenix.org/conference/usenixsecurity25/presentation/spracklen)). Attackers register such names.
-- **They take the newest version.** On 2026-03-31 two malicious `axios` releases were live on npm for about three hours ([Snyk](https://snyk.io/jp/blog/axios-npm-package-compromised-supply-chain-attack-delivers-cross-platform/)). An agent adding axios in that window pinned the malicious one.
+- **They install names from memory.** In a study of 16 code-generating models, at least 5.2% of packages suggested by commercial models and 21.7% by open-source models did not exist ([USENIX Security, 2025](https://www.usenix.org/conference/usenixsecurity25/presentation/spracklen)). Attackers register such names ([examples](docs/threat-coverage.md)).
+- **They take the newest version.** On 2026-03-31 two malicious `axios` releases were live on npm for about three hours ([Snyk](https://snyk.io/jp/blog/axios-npm-package-compromised-supply-chain-attack-delivers-cross-platform/)). An agent adding axios in that window would have pinned a malicious version.
 - **They act on what they read.** In February 2026 a GitHub issue title instructed an AI triage agent to run `npm install` from an attacker's fork, which led to a malicious `cline` release ([Snyk](https://snyk.io/blog/cline-supply-chain-attack-prompt-injection-github-actions)).
 
 ## Scope
@@ -35,8 +35,9 @@ git clone https://github.com/harinee/agent-oss-dependency-policy.git
 # 2. From your project root, add a preset to the file your agent reads
 cat ../agent-oss-dependency-policy/packaged/baseline-general.skills.md >> AGENTS.md
 
-# 3. Optional: enforce the cooldown and block install scripts in the package manager
-cp ../agent-oss-dependency-policy/enforcement/npm/npmrc.example .npmrc
+# 3. Optional: enforce the cooldown and block install scripts in the package manager.
+#    Read the comments in the file first; it needs npm 11.10 or later.
+cat ../agent-oss-dependency-policy/enforcement/npm/npmrc.example >> .npmrc
 ```
 
 `AGENTS.md` is read by Cursor, Cline, Roo Code, GitHub Copilot, OpenAI Codex and Devin Desktop. For Claude Code, copy the preset to `.claude/rules/oss-dependency-policy.md` instead (create the folder first). Other locations, presets and the Agent Skills form are in the [quick start guide](docs/QUICK_START.md).
@@ -55,7 +56,7 @@ To adjust thresholds, edit the "Tunable thresholds" table in your copy. The defa
 
 ## Designed to avoid blocking you
 
-A policy that interrupts constantly gets deleted. Every rule here has one response level, and most are the lowest.
+A policy that interrupts constantly gets deleted. Every rule here has one response level, and most are the lowest. The list below is what the rules ask an agent to do.
 
 | Level | What the agent does | Used for |
 |---|---|---|
@@ -89,13 +90,15 @@ flowchart LR
     F["Foundational<br/>baseline or strict<br/>(the rules)"] --> P["Preset<br/>one generated file"]
     O["Overlays<br/>capability, ecosystem,<br/>artifact type, context"] --> P
     P --> A["AGENTS.md, CLAUDE.md,<br/>rules folders<br/>(always on)"]
-    P --> S["agent-skills/&lt;name&gt;/SKILL.md<br/>(Agent Skills format)"]
+    P --> S["agent-skills/NAME/SKILL.md<br/>(Agent Skills format)"]
     E["enforcement/<br/>package-manager and CI config"] -. backs the same rules .-> A
 ```
 
 Presets are built from their sources by `scripts/build.py`, so they cannot drift. See [docs/packaging.md](docs/packaging.md).
 
-## What is covered
+## What the rules address
+
+A rule existing does not mean an agent follows it; see [Limits and status](#limits-and-status).
 
 | Threat | Rules | Example incident |
 |---|---|---|
@@ -155,6 +158,6 @@ Twelve incidents, with sources, scope and the remaining gap for each: [docs/thre
 
 ## Contributing and licence
 
-Contributions are welcome, especially eval results from real agents and overlays for Ruby, .NET and PHP. See the [contribution guide](docs/contribution-guide.md). Run `python3 scripts/build.py && python3 scripts/selfcheck.py` before opening a pull request.
+Contributions are welcome. The most useful are reports of rules that misfired, eval results from real agents, and overlays for Ruby, .NET and PHP. Start with [CONTRIBUTING.md](CONTRIBUTING.md). Run `make check` before opening a pull request.
 
 MIT. See [LICENSE](LICENSE).
