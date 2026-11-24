@@ -10,7 +10,7 @@ Everything here is an example to copy and adapt. File names end in `.example` so
 
 | Rule | Item | What it does | What it does not catch |
 |---|---|---|---|
-| AGE-1, SCR-1, PIN-1 | [npm/npmrc.example](npm/npmrc.example) | Refuses versions younger than 7 days (npm 11.10.0+), skips lifecycle scripts, saves exact versions | A malicious version older than the cooldown. Payloads that run at import time, not install time. Older npm versions ignore `min-release-age` silently. |
+| AGE-1, SCR-1, PIN-1 | [npm/npmrc.example](npm/npmrc.example) | Refuses versions younger than 7 days (npm 11.10.0+), skips lifecycle scripts, saves exact versions | A malicious version older than the cooldown. Payloads that run at import time, not install time. Older npm versions warn about `min-release-age` and do not apply it (seen with npm 11.4.2). |
 | AGE-1, SCR-1 | [pnpm/pnpm-workspace.example.yaml](pnpm/pnpm-workspace.example.yaml) | Same cooldown in minutes (pnpm 10.16+); dependency build scripts run only if allowlisted | Same as above. |
 | AGE-1, SCR-1 | [yarn/yarnrc.example.yml](yarn/yarnrc.example.yml) | One-week age gate; third-party install scripts off | Same as above. |
 | AGE-1 | [bun/bunfig.example.toml](bun/bunfig.example.toml) | Cooldown in seconds (Bun 1.3+) | Same as above. |
