@@ -1,0 +1,22 @@
+name: selfcheck
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  selfcheck:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Structure, links, presets, thresholds
+        run: python3 scripts/selfcheck.py
+      - name: Pin check on this repository
+        run: python3 enforcement/ci/check_pins.py .
+      - name: Eval harness self-test (scripted stand-ins, no agent)
+        run: python3 evals/run.py --self-test
