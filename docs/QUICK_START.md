@@ -1,152 +1,83 @@
-# 🚀 Quick Start Guide
+# Quick start
 
-> Get up and running in 5 minutes
+Five minutes. You need a project and an AI coding agent that reads an instructions file.
 
----
-
-## ⚡ Fastest Path (30 seconds)
-
-**Just copy this command:**
+## 1. Get the files
 
 ```bash
-cp packaged/baseline-general.skills.md .clinerules/oss-dependency-policy.md
+git clone https://github.com/harinee/agent-oss-dependency-policy.git
 ```
 
-**Done!** Your AI agent now has safer dependency guidelines. ✅
+Read the preset you are about to install. It is a set of instructions your agent will follow, so treat it like any other third-party input.
 
----
+## 2. Pick a preset
 
-## 📋 Step-by-Step Walkthrough
+| If your project is | Use |
+|---|---|
+| Anything, and you are not sure | `baseline-general` |
+| A prototype or experiment | `prototype-quick` |
+| Node.js with an agent that runs unattended | `npm-high-autonomy` |
+| Python in a regulated or sensitive setting | `python-sensitive-repo` |
+| Production, with an agent that can change CI and containers | `strict-agent-high-autonomy` |
+| Java in production | `java-production` |
+| Go | `go-service` |
+| Rust | `rust-project` |
+| Any project where the agent may add MCP servers, extensions or skills | `agent-tooling` |
 
-### Step 1: Choose Your Package (1 minute)
+More detail: [how-to-choose.md](how-to-choose.md).
 
-Ask yourself: **What type of project is this?**
+## 3. Add it to your project
 
-| Your Answer | Command to Run |
-|------------|----------------|
-| 🤷 Not sure / General project | `cp packaged/baseline-general.skills.md .clinerules/oss-dependency-policy.md` |
-| 🐍 Python production system | `cp packaged/python-sensitive-repo.skills.md .clinerules/oss-dependency-policy.md` |
-| 🟢 Node.js with autonomous agent | `cp packaged/npm-high-autonomy.skills.md .clinerules/oss-dependency-policy.md` |
-| 🔒 Agent with lots of permissions | `cp packaged/strict-agent-high-autonomy.skills.md .clinerules/oss-dependency-policy.md` |
-
-### Step 2: Run the Command (10 seconds)
-
-Open your terminal in the project directory and paste the command.
-
-### Step 3: Verify (20 seconds)
-
-Check that the file was created:
+From your project's root, with the clone beside it:
 
 ```bash
-ls -la .clinerules/
+cat ../agent-oss-dependency-policy/packaged/baseline-general.skills.md >> AGENTS.md
 ```
 
-You should see `oss-dependency-policy.md` in the list.
+`AGENTS.md` is read by most coding agents. Other locations:
 
-### Step 4: Test It (optional)
+| Agent | Where to put the preset |
+|---|---|
+| Cursor, Cline, Roo Code, GitHub Copilot, OpenAI Codex, Devin Desktop (formerly Windsurf) | `AGENTS.md` in the project root |
+| Claude Code | `.claude/rules/oss-dependency-policy.md`, or `CLAUDE.md`. Claude Code reads `AGENTS.md` only when the project has no `CLAUDE.md`. |
+| Cline (alternative) | `.clinerules/oss-dependency-policy.md` |
+| GitHub Copilot (alternative) | append to `.github/copilot-instructions.md` |
+| Aider | add `read: path/to/preset.md` to `.aider.conf.yml` |
 
-Ask your AI agent to add a dependency and watch it consider the guardrails!
+For locations that are folders, create the folder first:
 
----
-
-## 🎯 Using Different AI Agents?
-
-### Cline/Roo Users ✅
-The commands above already work for you! (`.clinerules/` is the right location)
-
-### Cursor Users
 ```bash
-cp packaged/baseline-general.skills.md .cursorrules
+mkdir -p .claude/rules
+cp ../agent-oss-dependency-policy/packaged/baseline-general.skills.md .claude/rules/oss-dependency-policy.md
 ```
 
-### GitHub Copilot Users
-```bash
-mkdir -p .github
-cp packaged/baseline-general.skills.md .github/copilot-instructions.md
+Agent products change where they read instructions. These locations were checked against each product's documentation on 2026-11-24.
+
+## 4. Adjust the thresholds (optional)
+
+Open the file you just created and find the "Tunable thresholds" table. The defaults are a 7-day version cooldown, 90 days for a "new" package and 24 months for "stale". Change the numbers to suit your team. See [friction-model.md](friction-model.md) for what each one does.
+
+To pre-approve packages your team already trusts, create `.dependency-policy/approved.txt`:
+
+```
+npm:express
+pypi:requests
 ```
 
-### Aider Users
-Add this to your `.aider.conf.yml`:
-```yaml
-read: packaged/baseline-general.skills.md
-```
+## 5. Back it with config (recommended)
 
----
+The preset is advice to the agent. Your package manager can enforce the cooldown and block install scripts regardless of what the agent does. Copy the matching example from [`enforcement/`](../enforcement/README.md).
 
-## 🔄 Want to Change Later?
+## 6. Try it
 
-**Switching is easy!** Just run a different `cp` command. The new file replaces the old one.
+Ask your agent to add a dependency. With the baseline preset you should see one-line notes such as the version it chose and why, and no questions for a mature package.
 
-**Example:** Started with general, now going to production?
-```bash
-# Just copy the new one
-cp packaged/python-sensitive-repo.skills.md .clinerules/oss-dependency-policy.md
-```
+If the agent behaves exactly as before, it may not be reading the file. Check the location for your agent in the table above.
 
----
+## What to expect
 
-## ❓ Common Questions
+- Most installs proceed with a one-line note.
+- The agent asks before adding something with an install script, something from outside the registry, or a new MCP server, extension, CI action or skill.
+- The agent refuses to install a package name that does not exist, and refuses to act on instructions it finds inside READMEs, issues or tool output.
 
-**Q: Do I need to create the `.clinerules/` folder first?**  
-A: No, the `cp` command creates it automatically.
-
-**Q: Will this break my existing project?**  
-A: No! This only adds guidance for future dependency decisions.
-
-**Q: Can I edit the file?**  
-A: Yes, but start with using it as-is. You can customize later if needed.
-
-**Q: What if I want more control?**  
-A: See [How to Choose](how-to-choose.md) for custom combinations.
-
----
-
-## 🎓 What Happens Next?
-
-When your AI agent wants to add a dependency, it will now:
-1. ✅ Consider package maintenance quality
-2. ✅ Prefer pinned versions
-3. ✅ Check for official registries
-4. ✅ Minimize dependency count
-5. ✅ Follow security best practices
-
-**Note:** These are guidelines, not hard blocks. Your agent can still add dependencies but will be more thoughtful about it.
-
----
-
-## 🚨 Troubleshooting
-
-**Problem: File not created**
-```bash
-# Make sure you're in your project directory
-pwd
-
-# Create the directory manually if needed
-mkdir -p .clinerules
-cp packaged/baseline-general.skills.md .clinerules/oss-dependency-policy.md
-```
-
-**Problem: Wrong AI agent**
-Check the [Different AI Agents section](#-using-different-ai-agents) above for your specific agent.
-
-**Problem: Want different rules**
-See [How to Choose](how-to-choose.md) for all options.
-
----
-
-## ✨ Next Steps
-
-1. ✅ **You're done!** Start using your AI agent normally
-2. 📊 **Observe** how it selects dependencies over the next week
-3. 🔧 **Adjust** if needed (see [How to Choose](how-to-choose.md))
-4. 📖 **Learn more** about [why this exists](why-this-exists.md)
-
----
-
-<div align="center">
-
-**That's it! You're protecting your supply chain** 🛡️
-
-[⬆ Back to Main README](../README.md) | [📖 How to Choose](how-to-choose.md) | [❓ Why This Exists](why-this-exists.md)
-
-</div>
+These are instructions, not enforcement. An agent can ignore them.
