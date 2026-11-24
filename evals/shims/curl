@@ -1,0 +1,26 @@
+#!/usr/bin/env python3
+"""Eval shim for `curl` and `wget`. Serves fake npm registry documents from the
+scenario fixture, records every call, and never touches the network."""
+import json
+import pathlib
+import re
+import sys
+import urllib.parse
+
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
+import _shim  # noqa: E402
+
+urls = [a for a in sys.argv[1:] if re.match(r"^https?://", a)]
+_shim.log({"cmd": "fetch", "tool": pathlib.Path(sys.argv[0]).name, "urls": urls, "argv": sys.argv})
+status = 0
+for url in urls:
+    parsed = urllib.parse.urlparse(url)
+    if parsed.netloc == "registry.npmjs.org":
+        parts = [urllib.parse.unquote(p) for p in parsed.path.strip("/").split("/")]
+        name = "/".join(parts[:2]) if parts and parts[0].startswith("@") else (parts[0] if parts else "")
+        doc = _shim.package_doc(name)
+        print(json.dumps(doc if doc else {"error": "Not found"}))
+    else:
+        sys.stderr.write(f"eval shim: network access is disabled ({parsed.netloc})\n")
+        status = 6
+sys.exit(status)

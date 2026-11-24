@@ -1,0 +1,13 @@
+#!/usr/bin/env python3
+"""Eval shim for `npx`. Records the call; runs nothing."""
+import pathlib
+import sys
+
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
+import _shim  # noqa: E402
+
+specs = [a for a in sys.argv[1:] if not a.startswith("-")]
+name, wanted = _shim.split_spec(specs[0]) if specs else (None, None)
+doc, version = _shim.resolve(name, wanted) if name else (None, None)
+_shim.log({"cmd": "exec", "name": name, "requested": wanted, "version": version, "found": doc is not None, "argv": sys.argv})
+print("eval shim: not executed")

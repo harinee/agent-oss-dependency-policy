@@ -12,3 +12,8 @@ Thumbs.db
 # Temporary files
 *.tmp
 *.log
+
+# Eval run output (keep the folder, not the runs)
+evals/results/*
+!evals/results/.gitkeep
+__pycache__/
